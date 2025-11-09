@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import eventsDataRaw, { EventItem } from "@/data/eventsData";
 import Link from "next/link";
-import { Calendar, MapPin, Clock, Share2, ArrowLeft, Info, Users, Flag } from "lucide-react";
+import { Calendar, MapPin, Clock, Share2, ArrowLeft, Info, Users, Flag, ExternalLink } from "lucide-react";
 
 function slugify(name: string) {
   return name.replace(/\s+/g, "-").toLowerCase();
@@ -17,12 +17,15 @@ function formatDateIndian(dateStr: string) {
   return `${day}/${month}/${year}`;
 }
 
-function getEventStatus(startTime: string, endTime: string) {
+function getEventStatus(start: string, end: string) {
   const now = new Date();
-  const start = new Date(startTime);
-  const end = new Date(endTime);
-  if (now < start) return { label: "Upcoming", color: "bg-blue-500" };
-  if (now >= start && now <= end) return { label: "Ongoing", color: "bg-green-500" };
+  now.setHours(0, 0, 0, 0);
+  const startDate = new Date(start);
+  startDate.setHours(0, 0, 0, 0);
+  const endDate = new Date(end);
+  endDate.setHours(23, 59, 59, 999);
+  if (now < startDate) return { label: "Upcoming", color: "bg-blue-500" };
+  if (now >= startDate && now <= endDate) return { label: "Ongoing", color: "bg-green-500" };
   return { label: "Completed", color: "bg-gray-500" };
 }
 
@@ -31,6 +34,7 @@ export default function EventDetailPage() {
   const router = useRouter();
   const slug = (params as any)?.slug as string | undefined;
   const [event, setEvent] = useState<EventItem | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -38,7 +42,7 @@ export default function EventDetailPage() {
     try {
       const raw = localStorage.getItem("admin_events");
       const list: EventItem[] = raw ? JSON.parse(raw) : eventsDataRaw;
-      const found = list.find(e => slugify(e.name) === decodeURIComponent(slug));
+      const found = list.find(e => slugify(e.event_name) === decodeURIComponent(slug));
       if (found) {
         setEvent(found);
         return;
@@ -47,160 +51,215 @@ export default function EventDetailPage() {
       // ignore
     }
 
-    const fallback = eventsDataRaw.find(e => slugify(e.name) === decodeURIComponent(slug));
+    const fallback = eventsDataRaw.find(e => slugify(e.event_name) === decodeURIComponent(slug));
     if (fallback) setEvent(fallback);
   }, [slug]);
 
   if (!slug) return <div className="p-8">Invalid event</div>;
   if (!event) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-saffron-light via-white to-green-light p-8">
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-green-50 p-8">
         <div className="container mx-auto px-4">
           <div className="py-20 text-center">
-            <div className="animate-pulse text-gray-600">Loading event details...</div>
+            <div className="inline-block">
+              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4 mx-auto"></div>
+              <p className="text-gray-600 font-medium">Loading event details...</p>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  const status = getEventStatus(event.startTime, event.endTime);
+  const status = getEventStatus(event.start, event.end);
+  const posterUrl = event.event_profile && event.event_profile !== "No Poster URL" 
+    ? `/events_posters/${event.event_profile}` 
+    : "/favicon.ico";
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-saffron-light via-white to-green-light">
+    <div className="w-full min-h-screen bg-gradient-to-b from-orange-50 via-white to-green-50">
       {/* Enhanced Header with Indian Theme */}
-      <section className="relative bg-gradient-to-r from-saffron via-white to-green text-gray-900 py-6 shadow-lg">
-        <div className="absolute inset-0 bg-pattern opacity-5"></div>
-        <div className="container mx-auto px-4 relative">
-          <div className="flex items-center justify-between mb-4">
-            <Link href="/events" className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 group transition-colors">
+      <section className="relative bg-gradient-to-r from-orange-400 via-white to-green-400 text-gray-900 py-8 shadow-xl border-b-4 border-white">
+        <div className="absolute inset-0 bg-white/40"></div>
+        <div className="container mx-auto px-4 relative animate-fade-in">
+          <div className="flex items-center justify-between mb-5">
+            <Link 
+              href="/events" 
+              className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 group transition-all duration-300 bg-white/90 hover:bg-white px-5 py-2.5 rounded-2xl shadow-md hover:shadow-lg border border-gray-200"
+            >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-medium">All Events</span>
+              <span className="font-semibold text-sm">Back to Events</span>
             </Link>
             
-            <div className="flex items-center gap-2 bg-white/80 px-3 py-1 rounded-full border">
-              <Flag className="w-4 h-4 text-saffron" />
-              <span className="text-sm font-medium text-gray-700">NSS Event</span>
+            <div className="flex items-center gap-2 bg-white/95 px-5 py-2.5 rounded-2xl border-2 border-orange-200 shadow-md">
+              <Flag className="w-4 h-4 text-orange-500" />
+              <span className="text-sm font-bold text-gray-800">NSS Event</span>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="bg-white p-2 rounded-lg shadow-sm">
-                <Users className="w-6 h-6 text-saffron" />
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="bg-white p-4 rounded-2xl shadow-xl border-2 border-orange-200">
+                <Users className="w-7 h-7 text-orange-500" />
               </div>
-              <div>
-                <h1 className="font-playfair text-2xl md:text-3xl font-bold text-gray-900">{event.name}</h1>
-                <p className="text-gray-600 text-sm mt-1">National Service Scheme</p>
+              <div className="flex-1">
+                <h1 className="font-playfair text-2xl md:text-4xl font-bold text-gray-900 leading-tight mb-2">
+                  {event.event_name}
+                </h1>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="bg-orange-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-md">
+                    National Service Scheme
+                  </span>
+                  <span className="text-gray-600 text-sm font-medium">•</span>
+                  <span className="text-gray-600 text-sm font-medium">IIIT Hyderabad</span>
+                </div>
               </div>
             </div>
             
-            <div className={`${status.color} text-white px-4 py-2 rounded-full text-sm font-medium shadow-sm flex items-center gap-2`}>
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-              {status.label}
+            <div className={`${status.color} text-white px-5 py-3 rounded-2xl text-sm font-bold shadow-xl flex items-center gap-3 transition-all duration-300 hover:scale-105 border-2 border-white/50`}>
+              <div className="w-3 h-3 bg-white rounded-full animate-pulse shadow-lg"></div>
+              <span className="text-base">{status.label}</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Compact Event Content */}
-      <section className="py-6">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Event Image */}
-            {event.image && (
-              <div className="lg:col-span-3">
-                <div className="modern-card p-0 overflow-hidden border-2 border-white shadow-lg rounded-xl">
+      {/* Enhanced Event Content */}
+      <section className="py-10">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Main Content - 2/3 width */}
+            <div className="xl:col-span-2 space-y-8 animate-fade-in-up">
+              {/* Enhanced Event Image with Loading State */}
+              <div className="relative group">
+                <div className={`overflow-hidden rounded-3xl shadow-2xl border-4 border-white transition-all duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   <img 
-                    src={event.image} 
-                    alt={event.name} 
-                    className="w-full h-48 md:h-64 object-cover"
+                    src={posterUrl} 
+                    alt={event.event_name} 
+                    className="w-full h-72 md:h-96 lg:h-[500px] object-cover transition-transform duration-700 group-hover:scale-110"
+                    onLoad={() => setImageLoaded(true)}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
+                {!imageLoaded && (
+                  <div className="absolute inset-0 w-full h-72 md:h-96 lg:h-[500px] bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white">
+                    <div className="text-center">
+                      <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3 mx-auto"></div>
+                      <p className="text-gray-500 font-medium">Loading poster...</p>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Compact Event Info Cards */}
-            <div className="modern-card bg-white border-l-4 border-saffron shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="bg-saffron-light p-2 rounded-lg">
-                  <Calendar className="w-4 h-4 text-saffron" />
+              {/* Enhanced Description Card */}
+              <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-100 hover:shadow-2xl transition-all duration-500 p-8">
+                <div className="flex items-center gap-4 mb-6 pb-4 border-b-2 border-gray-100">
+                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-3 rounded-2xl shadow-lg">
+                    <Info className="w-6 h-6 text-white" />
+                  </div>
+                  <h2 className="font-playfair text-2xl font-bold text-gray-900">About this Event</h2>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 text-sm">Date</h3>
-                  <p className="text-xs text-gray-600">
-                    {formatDateIndian(event.startTime)} - {formatDateIndian(event.endTime)}
+                <div className="prose prose-lg max-w-none">
+                  <p className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
+                    {event.description}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="modern-card bg-white border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <Clock className="w-4 h-4 text-blue-600" />
+            {/* Sidebar - 1/3 width */}
+            <div className="xl:col-span-1 space-y-6 animate-slide-in-right">
+              {/* Enhanced Event Info Card */}
+              <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-100 hover:shadow-2xl transition-all duration-300 p-6 sticky top-6">
+                <h3 className="font-bold text-gray-900 text-xl mb-6 pb-3 border-b-2 border-gray-100 flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-2 rounded-xl">
+                    <Calendar className="w-5 h-5 text-white" />
+                  </div>
+                  Event Details
+                </h3>
+                
+                <div className="space-y-5">
+                  {/* Date */}
+                  <div className="flex items-start gap-3 p-4 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 group hover:shadow-md transition-all duration-300">
+                    <div className="bg-white p-2 rounded-xl mt-0.5 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      <Calendar className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-800 text-sm mb-1">Date</h4>
+                      <p className="text-sm text-gray-700 font-medium">
+                        {formatDateIndian(event.start)} <span className="text-gray-500">to</span> {formatDateIndian(event.end)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Venue */}
+                  <div className="flex items-start gap-3 p-4 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 group hover:shadow-md transition-all duration-300">
+                    <div className="bg-white p-2 rounded-xl mt-0.5 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      <MapPin className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-800 text-sm mb-1">Venue</h4>
+                      <p className="text-sm text-gray-700 font-medium">{event.venue}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 text-sm">Time</h3>
-                  <p className="text-xs text-gray-600">
-                    {new Date(event.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })} - 
-                    {new Date(event.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                  </p>
+
+                {/* Enhanced Audience Tags */}
+                {event.audience && event.audience.length > 0 && (
+                  <div className="mt-6 pt-6 border-t-2 border-gray-100">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-xl shadow-sm">
+                        <Users className="w-5 h-5 text-white" />
+                      </div>
+                      <h4 className="font-bold text-gray-900 text-sm">Audience</h4>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {event.audience.map((aud, i) => (
+                        <span 
+                          key={i} 
+                          className="text-xs bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 py-2 rounded-xl font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+                        >
+                          {aud.toUpperCase()}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Enhanced Action Buttons */}
+                <div className="mt-6 pt-6 border-t-2 border-gray-100 space-y-3">
+                  <button 
+                    onClick={() => { 
+                      navigator.clipboard?.writeText(window.location.href);
+                      alert('Event link copied to clipboard!');
+                    }} 
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-bold"
+                  >
+                    <Share2 className="w-5 h-5" />
+                    Share Event
+                  </button>
+                  
+                  <button 
+                    onClick={() => router.back()} 
+                    className="w-full bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-700 flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg font-bold"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    Go Back
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <div className="modern-card bg-white border-l-4 border-green-500 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="bg-green-50 p-2 rounded-lg">
-                  <MapPin className="w-4 h-4 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 text-sm">Location</h3>
-                  <p className="text-xs text-gray-600">{event.location}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Compact Description */}
-            <div className="lg:col-span-3 modern-card bg-white shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="bg-saffron-light p-2 rounded-lg">
-                  <Info className="w-4 h-4 text-saffron" />
-                </div>
-                <h2 className="font-semibold text-gray-800">About this Event</h2>
-              </div>
-              <p className="text-gray-700 text-sm leading-relaxed">{event.description}</p>
-            </div>
-
-            {/* Compact Action Buttons */}
-            <div className="lg:col-span-3 flex flex-wrap gap-3 justify-center pt-2">
-              <button 
-                onClick={() => { 
-                  navigator.clipboard?.writeText(window.location.href);
-                  alert('Event link copied to clipboard!');
-                }} 
-                className="btn-base bg-saffron hover:bg-saffron-dark text-white flex items-center gap-2 px-4 py-2 rounded-lg transition-colors shadow-sm"
-              >
-                <Share2 className="w-4 h-4" />
-                Share Event
-              </button>
-              <button 
-                onClick={() => router.back()} 
-                className="btn-base bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 flex items-center gap-2 px-4 py-2 rounded-lg transition-colors shadow-sm"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Go Back
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* NSS Footer Note */}
-      <div className="container mx-auto px-4 py-4 text-center">
-        <div className="text-xs text-gray-500 border-t border-gray-200 pt-4">
-          <p>National Service Scheme - "Not Me But You"</p>
+      {/* Enhanced NSS Footer Note */}
+      <div className="container mx-auto px-4 py-6 text-center border-t border-gray-200/50 mt-8">
+        <div className="text-sm text-gray-600">
+          <p className="font-semibold bg-gradient-to-r from-saffron to-green bg-clip-text text-transparent text-lg mb-2">
+            National Service Scheme
+          </p>
+          <p className="text-gray-500 italic">"Not Me But You"</p>
         </div>
       </div>
     </div>

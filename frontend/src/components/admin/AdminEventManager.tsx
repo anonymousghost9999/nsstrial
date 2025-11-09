@@ -25,7 +25,16 @@ export default function AdminEventManager() {
         return;
       } catch {}
     }
-    setEvents(eventsData);
+    // Map legacy eventsData shape to the EventItem shape used in this component
+    const mapped = (eventsData as any[]).map(e => ({
+      name: e.event_name || e.name || "",
+      startTime: e.start || e.startTime || "",
+      endTime: e.end || e.endTime || "",
+      location: e.venue || e.location || "",
+      description: e.description || "",
+      image: e.event_profile || e.image || "",
+    }));
+    setEvents(mapped);
   }, []);
 
   useEffect(() => {
@@ -54,7 +63,17 @@ export default function AdminEventManager() {
           <h1 className="text-3xl font-playfair font-bold text-blue-800">Admin — Events</h1>
           <div className="flex gap-2">
             <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={() => openEditor({ name: "", startTime: "", endTime: "", location: "", description: "", image: "" })}>Add Event</button>
-            <button className="px-4 py-2 bg-gray-100 rounded" onClick={() => { localStorage.removeItem(STORAGE_KEY); setEvents(eventsData); }}>Reset</button>
+            <button className="px-4 py-2 bg-gray-100 rounded" onClick={() => { localStorage.removeItem(STORAGE_KEY);
+              const mapped = (eventsData as any[]).map(e => ({
+                name: e.event_name || e.name || "",
+                startTime: e.start || e.startTime || "",
+                endTime: e.end || e.endTime || "",
+                location: e.venue || e.location || "",
+                description: e.description || "",
+                image: e.event_profile || e.image || "",
+              }));
+              setEvents(mapped);
+            }}>Reset</button>
           </div>
         </div>
 

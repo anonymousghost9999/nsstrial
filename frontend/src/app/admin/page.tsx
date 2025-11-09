@@ -1,8 +1,26 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+// Feature flag: toggle visibility/access to the admin index.
+// Set to `true` to re-enable admin landing page (keeps code intact).
+const SHOW_ADMIN_INDEX = false;
 
 export default function AdminIndex() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!SHOW_ADMIN_INDEX) {
+      // Redirect users away from /admin when the admin index is disabled.
+      // We use replace so the back button won't return to /admin.
+      router.replace("/");
+    }
+  }, [router]);
+
+  // When admin index is disabled, render nothing (redirect happens in client)
+  if (!SHOW_ADMIN_INDEX) return null;
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50 py-12">
       <div className="container mx-auto px-6 lg:px-8">

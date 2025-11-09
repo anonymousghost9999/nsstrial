@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Calendar, Info, Users, Phone, Rocket, Menu, X } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
-import { login, getUserData } from "@/utils/loginNlogout";
+// import { login} from "@/utils/loginNlogout";
 
 const navigationItems = [
     { label: "Home", href: "/", icon: Home },
     { label: "Events", href: "/events", icon: Calendar },
      { label: "Team", href: "/members", icon: Users },
+    //{ label: "Team", href: "https://clubs.iiit.ac.in/student-bodies/nss", icon: Users },
     { label: "About", href: "/about", icon: Info },
     { label: "Contact", href: "/contact", icon: Phone }
 ];
@@ -18,22 +19,22 @@ export default function Navbar() {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [userAuthenticated, setUserAuthenticated] = useState(false);
+    // const [userAuthenticated, setUserAuthenticated] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
         window.addEventListener("scroll", handleScroll);
         
         // Check authentication status
-        const userData = getUserData();
-        setUserAuthenticated(!!userData);
+        // const userData = getUserData();
+        // setUserAuthenticated(!!userData);
         
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const handleLogin = () => {
-        login();
-    };
+    // const handleLogin = () => {
+    //     login();
+    // };
 
     return (
         <>
@@ -103,6 +104,7 @@ export default function Navbar() {
                         {/* Auth & Mobile Menu */}
                         <div className="flex items-center space-x-3">
                             {/* Auth Button */}
+                            {/*
                             {!userAuthenticated ? (
                                 <button
                                     onClick={handleLogin}
@@ -116,7 +118,7 @@ export default function Navbar() {
                                     <ProfileDropdown />
                                 </div>
                             )}
-
+                            */}
                             {/* Mobile Menu Button */}
                             <button
                                 className="lg:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-200"
@@ -189,6 +191,7 @@ export default function Navbar() {
 
                     {/* Mobile Auth Section */}
                     <div className="mt-8 pt-6 border-t border-gray-200">
+                        {/*
                         {!userAuthenticated ? (
                             <button
                                 onClick={handleLogin}
@@ -202,6 +205,7 @@ export default function Navbar() {
                                 <ProfileDropdown />
                             </div>
                         )}
+                        */}
                     </div>
                 </div>
             </div>

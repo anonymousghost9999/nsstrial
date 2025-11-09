@@ -1,21 +1,35 @@
 "use client";
 import React, { useState } from "react";
-import eventsData from "@/data/eventsData";
+import eventsData, { EventItem } from "@/data/eventsData";
 
 export default function AdminEventsPage() {
-  const [events, setEvents] = useState(eventsData.map(e => ({ ...e })));
+  const [events, setEvents] = useState<EventItem[]>(eventsData.map(e => ({ ...e })));
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
   const [search, setSearch] = useState("");
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
 
-  function updateField(idx: number, key: string, value: string) {
+  function updateField(idx: number, key: keyof EventItem, value: string | string[]) {
     const copy = [...events];
     (copy[idx] as any)[key] = value;
     setEvents(copy);
   }
+  
+  function updateAudience(idx: number, audienceStr: string) {
+    const copy = [...events];
+    copy[idx].audience = audienceStr.split(',').map(a => a.trim()).filter(a => a);
+    setEvents(copy);
+  }
 
   function addEvent() {
-    setEvents([...events, { name: "New Event", startTime: "", endTime: "", location: "", description: "", image: "" }]);
+    setEvents([...events, { 
+      event_name: "New Event", 
+      start: "", 
+      end: "", 
+      venue: "", 
+      description: "", 
+      event_profile: "",
+      audience: []
+    }]);
   }
 
   function removeEvent(idx: number) {
@@ -43,16 +57,26 @@ export default function AdminEventsPage() {
 
           {events.filter(ev => {
             const q = search.toLowerCase();
-            return ev.name.toLowerCase().includes(q) || (ev.location || "").toLowerCase().includes(q) || (ev.description || "").toLowerCase().includes(q);
+            return ev.event_name.toLowerCase().includes(q) || 
+              (ev.venue || "").toLowerCase().includes(q) || 
+              (ev.description || "").toLowerCase().includes(q) ||
+              (ev.audience?.some(a => a.toLowerCase().includes(q)) ?? false);
           }).map((ev, idx) => (
             <div key={idx} className="modern-card">
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-semibold">{ev.name}</h3>
-                    <span className="text-sm text-gray-600">{ev.startTime} — {ev.endTime}</span>
+                    <h3 className="text-lg font-semibold">{ev.event_name}</h3>
+                    <span className="text-sm text-gray-600">{ev.start} — {ev.end}</span>
                   </div>
-                  <p className="text-sm text-gray-600">{ev.location}</p>
+                  <p className="text-sm text-gray-600">{ev.venue}</p>
+                  {ev.audience && ev.audience.length > 0 && (
+                    <div className="flex gap-1 mt-2">
+                      {ev.audience.map((aud, i) => (
+                        <span key={i} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">{aud}</span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setExpanded(prev => ({ ...prev, [idx]: !prev[idx] }))} className="p-2 rounded hover:bg-gray-100 text-nss-primary">{expanded[idx] ? '▾' : '▸'}</button>
@@ -63,10 +87,12 @@ export default function AdminEventsPage() {
               {expanded[idx] && (
                 <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="md:col-span-2">
-                    <p className="text-sm text-gray-700">{ev.description}</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-line">{ev.description}</p>
                   </div>
                   <div>
-                    {ev.image && <img src={ev.image} alt={ev.name} className="w-full rounded" />}
+                    {ev.event_profile && ev.event_profile !== "No Poster URL" && (
+                      <img src={`/events_posters/${ev.event_profile}`} alt={ev.event_name} className="w-full rounded" />
+                    )}
                   </div>
                 </div>
               )}
@@ -80,10 +106,10 @@ export default function AdminEventsPage() {
 
         {/* Event Edit Modal */}
         {editingIdx !== null && events[editingIdx] && (
-          <div className="fixed inset-0 bg-black/40 flex items-start justify-center p-6 z-50">
-            <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6">
+          <div className="fixed inset-0 bg-black/40 flex items-start justify-center p-6 z-50 overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6 my-8">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Edit Event — {events[editingIdx].name}</h2>
+                <h2 className="text-lg font-semibold">Edit Event — {events[editingIdx].event_name}</h2>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setEditingIdx(null)} className="text-gray-600">Close</button>
                 </div>
@@ -92,36 +118,46 @@ export default function AdminEventsPage() {
               <div className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs text-gray-600">Name</label>
-                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].name} onChange={e => updateField(editingIdx, 'name', e.target.value)} />
+                    <label className="text-xs text-gray-600">Event Name</label>
+                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].event_name} onChange={e => updateField(editingIdx, 'event_name', e.target.value)} />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">Location</label>
-                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].location} onChange={e => updateField(editingIdx, 'location', e.target.value)} />
+                    <label className="text-xs text-gray-600">Venue</label>
+                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].venue} onChange={e => updateField(editingIdx, 'venue', e.target.value)} />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">Start</label>
-                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].startTime} onChange={e => updateField(editingIdx, 'startTime', e.target.value)} />
+                    <label className="text-xs text-gray-600">Start Date</label>
+                    <input className="w-full border px-3 py-2 rounded" type="date" value={events[editingIdx].start} onChange={e => updateField(editingIdx, 'start', e.target.value)} />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-600">End</label>
-                    <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].endTime} onChange={e => updateField(editingIdx, 'endTime', e.target.value)} />
+                    <label className="text-xs text-gray-600">End Date</label>
+                    <input className="w-full border px-3 py-2 rounded" type="date" value={events[editingIdx].end} onChange={e => updateField(editingIdx, 'end', e.target.value)} />
                   </div>
                 </div>
 
                 <div>
                   <label className="text-xs text-gray-600">Description</label>
-                  <textarea className="w-full border px-3 py-2 rounded" value={events[editingIdx].description} onChange={e => updateField(editingIdx, 'description', e.target.value)} />
+                  <textarea rows={4} className="w-full border px-3 py-2 rounded" value={events[editingIdx].description} onChange={e => updateField(editingIdx, 'description', e.target.value)} />
                 </div>
 
                 <div>
-                  <label className="text-xs text-gray-600">Image URL</label>
-                  <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].image || ''} onChange={e => updateField(editingIdx, 'image', e.target.value)} />
+                  <label className="text-xs text-gray-600">Event Poster Filename</label>
+                  <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].event_profile || ''} onChange={e => updateField(editingIdx, 'event_profile', e.target.value)} placeholder="e.g. poster_event_name.jpg" />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600">Target Audience (comma-separated)</label>
+                  <input className="w-full border px-3 py-2 rounded" value={events[editingIdx].audience?.join(', ') || ''} onChange={e => updateAudience(editingIdx, e.target.value)} placeholder="e.g. ug1, ug2, pg, fac" />
                 </div>
 
                 <div className="flex justify-end gap-2">
                   <button onClick={() => setEditingIdx(null)} className="btn-base btn-outline">Cancel</button>
-                  <button onClick={() => setEditingIdx(null)} className="btn-base btn-primary">Save</button>
+                  <button onClick={() => {
+                    // Save to localStorage
+                    localStorage.setItem('admin_events', JSON.stringify(events));
+                    setEditingIdx(null);
+                    alert('Events saved to localStorage!');
+                  }} className="btn-base btn-primary">Save</button>
                 </div>
               </div>
             </div>

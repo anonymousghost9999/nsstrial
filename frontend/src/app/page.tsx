@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { Users, BookOpen, Heart, Target, ArrowRight } from "lucide-react";
 import Carousel from "@/components/home/Carousel";
@@ -14,6 +16,11 @@ const heroImages = [
 ];
 
 export default function HomePage() {
+  const scrollToJoinNSS = () => {
+    const element = document.getElementById('join-nss');
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50">
       {/* Hero Section with Carousel */}
@@ -39,7 +46,7 @@ export default function HomePage() {
       </div>
 
       {/* Join NSS Section */}
-      <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50">
+      <div id='join-nss' className="bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50">
           <VolunteerReg />
       </div>
 
@@ -69,7 +76,10 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <button className="group bg-white text-blue-800 hover:bg-blue-50 font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3">
+              <button 
+                onClick={scrollToJoinNSS}
+                className="group bg-white text-blue-800 hover:bg-blue-50 font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3"
+              >
                 <Users className="w-6 h-6" />
                 <span>Join NSS Today</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

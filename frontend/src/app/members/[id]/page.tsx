@@ -10,5 +10,5 @@ type Props = {
  */
 export default async function MembersRedirect({ params }: Props) {
   const { id } = await params as { id: string };
-  redirect(`/member/profile/${id}`);
+  redirect(`/member/profile/${encodeURIComponent(id)}`);
 }

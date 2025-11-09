@@ -10,14 +10,29 @@ type Props = {
 
 export default async function MemberProfile({ params }: Props) {
   const { id } = await params as { id: string };
-  
+
+  // Decode the incoming param in case the URL used percent-encoding (e.g. %40 for @)
+  let lookupId = String(id || '');
+  try { lookupId = decodeURIComponent(lookupId); } catch (e) { /* fall back to raw id */ }
+  const normalizedLookup = lookupId.toLowerCase();
+
   // Fetch live data with error handling
   const members = await getMembersFromDB();
-  
-  // Try to find member by rollNumber first, then by emailUsername
-  const member = members.find((m: any) => 
-    m.rollNumber === id || m.emailUsername === id
-  ) || null;
+
+  // Try to find member by rollNumber, id, email, or email username (case-insensitive)
+  const member = members.find((m: any) => {
+    const roll = m.rollNumber ? String(m.rollNumber).toLowerCase() : '';
+    const mid = m.id ? String(m.id).toLowerCase() : '';
+    const email = m.email ? String(m.email).toLowerCase() : '';
+    const emailUser = email.includes('@') ? email.split('@')[0] : (m.emailUsername ? String(m.emailUsername).toLowerCase() : '');
+
+    return (
+      roll === normalizedLookup ||
+      mid === normalizedLookup ||
+      email === normalizedLookup ||
+      emailUser === normalizedLookup
+    );
+  }) || null;
 
   // Show 404 if member not found
   if (!member) {
@@ -25,8 +40,34 @@ export default async function MemberProfile({ params }: Props) {
     notFound();
   }
 
-  const isActive = member?.status === 'active' || member?.end?.toLowerCase() === 'present' || !member?.end;
-  const linkedInUrl = `https://www.linkedin.com/in/${member.rollNumber}`;
+  // Compute active status and pick current/most-recent work entry
+  const workHistory = Array.isArray(member.workHistory) ? member.workHistory : [];
+  const currentWork = workHistory.find((w: any) => !w.end) || workHistory[workHistory.length - 1] || null;
+  const isActive = workHistory.some((w: any) => !w.end);
+  const linkedInUrl = (member.linkedin && member.linkedin !== '-') ? member.linkedin : `https://www.linkedin.com/in/${member.rollNumber}`;
+
+  // Friendly vars used by the UI (preserve UI without changing markup)
+  const team = currentWork?.team || member.team || '';
+  const start = currentWork?.start || '';
+  const end = currentWork?.end || '';
+  const batchOrYear = (member as any).batch || (member as any).year || null;
+
+  const formatYear = (val?: string) => {
+    if (!val) return '';
+    const s = String(val).trim();
+    if (!s) return '';
+    if (s.toLowerCase() === 'present') return 'Present';
+    if (s.includes('-')) return s.split('-')[0];
+    return s;
+  };
+
+  const getPhoto = (val?: string) => {
+    if (!val) return '/favicon.ico';
+    const s = String(val).trim();
+    if (!s) return '/favicon.ico';
+    if (s === '-') return '/favicon.ico';
+    return s;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -49,9 +90,9 @@ export default async function MemberProfile({ params }: Props) {
               <div className="w-32 h-32 rounded-full p-1 shadow-xl" style={{
                 background: 'linear-gradient(to bottom, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%)'
               }}>
-                <div className="w-full h-full rounded-full overflow-hidden bg-white border-2 border-white">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-white border-2 border-white">
                   <img 
-                    src={member.photoUrl || '/favicon.ico'} 
+                    src={getPhoto(member.photoUrl)} 
                     alt={member.name || ''} 
                     className="w-full h-full object-cover"
                   />
@@ -71,7 +112,7 @@ export default async function MemberProfile({ params }: Props) {
                 ) : (
                   <>
                     <XCircle className="w-3 h-3" />
-                    Alumni
+                    Past Member
                   </>
                 )}
               </div>
@@ -85,16 +126,16 @@ export default async function MemberProfile({ params }: Props) {
               <div className="flex flex-wrap items-center gap-3 mb-3">
                 <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-medium shadow-lg">
                   <Users className="w-4 h-4 mr-2" />
-                  {member.team} Team
+                  {team} Team
                 </div>
                 {member.department && (
                   <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white rounded-full font-medium shadow-lg">
                     {member.department}
                   </div>
                 )}
-                {member.year && (
+                {batchOrYear && (
                   <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium shadow-lg">
-                    {member.year}
+                    {batchOrYear}
                   </div>
                 )}
               </div>
@@ -129,13 +170,41 @@ export default async function MemberProfile({ params }: Props) {
 
               {/* Duration */}
               <div className="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border-2 border-pink-200">
-                <h3 className="text-sm font-semibold text-pink-800 uppercase mb-2 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Duration
-                </h3>
-                <p className="text-lg font-semibold text-pink-900">
-                  {member.start} - {member.end || 'Present'}
-                </p>
+                  <h3 className="text-sm font-semibold text-pink-800 uppercase mb-2 flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    Working Duration
+                  </h3>
+                  <p className="text-lg font-semibold text-pink-900">
+                    {(() => {
+                      // compute overall duration from member.workHistory if present
+                      const wh = Array.isArray(member.workHistory) ? member.workHistory : [];
+                      if (!wh || wh.length === 0) {
+                        return `${formatYear(start)} - ${end ? formatYear(end) : 'Present'}`;
+                      }
+
+                      // collect valid starts and ends
+                      const starts = wh.map((w: any) => w.start).filter(Boolean) as string[];
+                      const ends = wh.map((w: any) => w.end).filter(Boolean) as string[]; // end may be null for present
+
+                      // earliest start
+                      let earliestStart = starts.length ? starts[0] : start;
+                      for (const s of starts) {
+                        try { if (new Date(s) < new Date(earliestStart)) earliestStart = s; } catch (e) { /* ignore */ }
+                      }
+
+                      // if any current role (no end) -> Present
+                      const hasPresent = wh.some((w: any) => !w.end);
+                      if (hasPresent) return `${formatYear(earliestStart)} - Present`;
+
+                      // latest end
+                      let latestEnd = ends.length ? ends[0] : end;
+                      for (const e of ends) {
+                        try { if (new Date(e) > new Date(latestEnd)) latestEnd = e; } catch (err) { /* ignore */ }
+                      }
+
+                      return `${formatYear(earliestStart)} - ${formatYear(latestEnd)}`;
+                    })()}
+                  </p>
               </div>
             </div>
 
@@ -207,7 +276,7 @@ export default async function MemberProfile({ params }: Props) {
                                 {work.team}
                               </span>
                             </td>
-                            <td className="px-4 py-4 text-gray-700">{work.start}</td>
+                              <td className="px-4 py-4 text-gray-700">{formatYear(work.start)}</td>
                             <td className="px-4 py-4">
                               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-800">
                                 <CheckCircle className="w-4 h-4" />
@@ -235,35 +304,25 @@ export default async function MemberProfile({ params }: Props) {
                       <tr className="bg-blue-50 border-b-2 border-blue-200">
                         <th className="px-4 py-3 text-left text-sm font-semibold text-blue-800">Role</th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-blue-800">Team</th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-blue-800">Duration</th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-blue-800">Period</th>
                       </tr>
                     </thead>
                     <tbody>
                       {member.workHistory
                         .filter((work: any) => work.end)
-                        .map((work: any, index: number) => {
-                          const startDate = new Date(work.start);
-                          const endDate = new Date(work.end);
-                          const months = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
-                          
-                          return (
-                            <tr key={index} className="border-b border-blue-100 hover:bg-blue-50 transition-colors">
-                              <td className="px-4 py-4 font-semibold text-gray-800">{work.role}</td>
-                              <td className="px-4 py-4">
-                                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                                  {work.team}
-                                </span>
-                              </td>
-                              <td className="px-4 py-4 text-gray-700">
-                                {months > 0 ? `${months} month${months !== 1 ? 's' : ''}` : '< 1 month'}
-                              </td>
-                              <td className="px-4 py-4 text-gray-600 text-sm">
-                                {work.start} - {work.end}
-                              </td>
-                            </tr>
-                          );
-                        })}
+                        .map((work: any, index: number) => (
+                          <tr key={index} className="border-b border-blue-100 hover:bg-blue-50 transition-colors">
+                            <td className="px-4 py-4 font-semibold text-gray-800">{work.role}</td>
+                            <td className="px-4 py-4">
+                              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                                {work.team}
+                              </span>
+                            </td>
+                            <td className="px-4 py-4 text-gray-600 text-sm">
+                              {formatYear(work.start)} - {formatYear(work.end)}
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import membersData from "@/components/team/Data";
+import membersData from "@/data/Data";
 
 type WorkHistory = { role: string; team: string; start: string; end: string | null };
-type Member = typeof membersData[number];
+// Base shape comes from data; augment with admin-only optional fields
+type MemberBase = typeof membersData[number];
+type Member = MemberBase & { year?: string };
 
 const STORAGE_KEY = "admin_members";
 
@@ -60,7 +62,6 @@ export default function AdminMemberManager() {
                 >
                   Edit
                 </button>
-                <div className="px-3 py-2 rounded-lg bg-gray-100 text-sm text-gray-700">Admin: {m.isAdmin ? "Yes" : "No"}</div>
               </div>
             </div>
           ))}
@@ -86,7 +87,7 @@ function MemberEditor({ member, onCancel, onSave }: { member: Member; onCancel: 
 
   useEffect(() => setLocal(member), [member]);
 
-  const setIsAdmin = (val: boolean) => setLocal(prev => ({ ...prev, isAdmin: val }));
+  // isAdmin removed from member model; no-op
 
   const updateWorkHistory = (idx: number, patch: Partial<WorkHistory>) => {
     const copy = [...(local.workHistory || [])];
@@ -159,16 +160,7 @@ function MemberEditor({ member, onCancel, onSave }: { member: Member; onCancel: 
         </div>
       </div>
 
-      {/* Editable: isAdmin */}
-      <div className="mt-4 flex items-center gap-4">
-        <label className="text-sm text-gray-600">Is Admin</label>
-        <button
-          className={`px-4 py-2 rounded ${local.isAdmin ? "bg-green-600 text-white" : "bg-gray-200 text-gray-800"}`}
-          onClick={() => setIsAdmin(!local.isAdmin)}
-        >
-          {local.isAdmin ? "Yes" : "No"}
-        </button>
-      </div>
+      {/* isAdmin control removed */}
 
       {/* Editable: Work History table */}
       <div className="mt-6">

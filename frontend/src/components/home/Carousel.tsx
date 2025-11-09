@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CarouselProps {
@@ -11,6 +12,16 @@ interface CarouselProps {
 const Carousel: React.FC<CarouselProps> = ({ images, interval = 5000, children }) => {
   const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const router = useRouter();
+
+  const scrollToJoinNSS = () => {
+    const element = document.getElementById('join-nss');
+    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const navigateToEvents = () => {
+    router.push('/events');
+  };
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -86,11 +97,17 @@ const Carousel: React.FC<CarouselProps> = ({ images, interval = 5000, children }
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="group bg-gradient-to-r from-orange-500 to-green-600 text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3">
+            <button 
+              onClick={scrollToJoinNSS}
+              className="group bg-gradient-to-r from-orange-500 to-green-600 text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3"
+            >
               <span>Join Our Mission</span>
               <div className="w-2 h-2 bg-white rounded-full group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="border-2 border-white text-white hover:bg-white hover:text-blue-800 font-semibold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105">
+            <button 
+              onClick={navigateToEvents}
+              className="border-2 border-white text-white hover:bg-white hover:text-blue-800 font-semibold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105"
+            >
               Explore Events
             </button>
           </div>

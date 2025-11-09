@@ -1,5 +1,5 @@
 // getMembers.tsx
-import membersData from '@/components/team/Data';
+import membersData from '@/data/Data';
 
 // Transform Data.tsx format to the expected format
 function transformMemberData(member: any) {
@@ -17,6 +17,8 @@ function transformMemberData(member: any) {
   return {
     name: member.name,
     email: member.email,
+    // Preserve original batch if present; fall back to year for compatibility
+    batch: member.batch || member.year || '',
     rollNumber: member.rollNumber,
     emailUsername: emailUsername, // Add this for matching
     team: currentWork?.team || 'General',

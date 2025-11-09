@@ -12,16 +12,27 @@ type Member = {
   rollNumber: string;
   from: string;
   to: string;
+  workHistory?: Array<{ role?: string; team?: string; start?: string; end?: string | null }>;
 };
 
 export default function MemberCard({ member }: { member: Member }) {
   const [imageError, setImageError] = useState(false);
   const [hover, setHover] = useState(false);
 
+  const formatYear = (val?: string) => {
+    if (!val) return '';
+    const s = String(val).trim();
+    if (!s) return '';
+    if (s.toLowerCase() === 'present') return 'Present';
+    // If value includes a month like YYYY-MM, return only YYYY
+    if (s.includes('-')) return s.split('-')[0];
+    return s;
+  };
+
   const getFallbackImage = () => "/favicon.ico";
   const getImageSrc = (): string => {
     if (imageError) return getFallbackImage();
-    if (!member.photoUrl || member.photoUrl.trim() === "" || member.photoUrl === "hi") {
+    if (!member.photoUrl || member.photoUrl.trim() === "" || member.photoUrl === "hi" || member.photoUrl === "-") {
       return getFallbackImage();
     }
     return member.photoUrl;
@@ -63,10 +74,13 @@ export default function MemberCard({ member }: { member: Member }) {
   const handleClick = () => {
     const uid = getCookie('uid');
     // If clicked member matches current user (uid), go to /me/profile, else to member/profile
-    if (uid && (uid === member.rollNumber || uid === member.id)) {
+    if (uid && (uid === member.rollNumber || uid === member.id || uid === member.email)) {
+      // current user -> go to /me/profile using rollNumber to keep existing behavior
       router.push(`/me/profile/${member.rollNumber}`);
     } else {
-      router.push(`/member/profile/${member.rollNumber}`);
+      // navigate to member profile using email (preferred). Fallback to id or rollNumber.
+      const preferred = member.email || member.id || member.rollNumber;
+      router.push(`/member/profile/${encodeURIComponent(preferred)}`);
     }
   };
   return (
@@ -148,15 +162,51 @@ export default function MemberCard({ member }: { member: Member }) {
           <div className="w-full">
             <div className={`inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium ${getStatusBadge()} w-full justify-center`}>
               <span className="mr-2">
-                {(!member.to || member.to.toLowerCase() === 'present') ? 
-                  <CheckCircle className="w-4 h-4 text-green-600 inline" /> : 
-                  <XCircle className="w-4 h-4 text-red-600 inline" />
-                }
+                {(!member.to || (typeof member.to === 'string' && member.to.toLowerCase() === 'present')) ? 
+                    <CheckCircle className="w-4 h-4 text-green-600 inline" /> : 
+                    <XCircle className="w-4 h-4 text-red-600 inline" />
+                  }
               </span>
-              {(!member.to || member.to.toLowerCase() === 'present')
-                ? `${member.from} - Present`
-                : `${member.from} - ${member.to}`
-              }
+                {(() => {
+                  // Compute overall duration from first role start to last role end
+                  const wh = member.workHistory || [];
+                  if (!Array.isArray(wh) || wh.length === 0) {
+                    // Fall back to current 'from' and 'to'
+                    return (!member.to || (typeof member.to === 'string' && member.to.toLowerCase() === 'present'))
+                      ? `${formatYear(member.from)} - Present`
+                      : `${formatYear(member.from)} - ${formatYear(member.to)}`;
+                  }
+
+                  // Collect valid start and end dates
+                  const starts = wh.map(w => w.start).filter(Boolean) as string[];
+                  const ends = wh.map(w => w.end).filter(Boolean) as string[]; // end may be null for present
+
+                  // Determine earliest start
+                  let earliestStart = starts.length ? starts[0] : member.from;
+                  for (const s of starts) {
+                    try {
+                      if (new Date(s) < new Date(earliestStart)) earliestStart = s;
+                    } catch (e) {
+                      // ignore invalid dates
+                    }
+                  }
+
+                  // If any entry has no end -> Present
+                  const hasPresent = wh.some(w => !w.end);
+                  if (hasPresent) return `${formatYear(earliestStart)} - Present`;
+
+                  // Otherwise pick latest end
+                  let latestEnd = ends.length ? ends[0] : member.to;
+                  for (const e of ends) {
+                    try {
+                      if (new Date(e) > new Date(latestEnd)) latestEnd = e;
+                    } catch (err) {
+                      // ignore
+                    }
+                  }
+
+                  return `${formatYear(earliestStart)} - ${formatYear(latestEnd)}`;
+                })()}
             </div>
           </div>
         </div>

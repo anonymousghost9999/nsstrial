@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
-import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Twitter, Send, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Twitter, Send, MessageCircle, Rocket } from 'lucide-react';
+import Link from 'next/link';
 
 export default function ContactPage() {
   // Generate floating particles only on client to avoid SSR hydration mismatches
+  const [isMounted, setIsMounted] = useState(false);
   const [particles, setParticles] = useState<Array<{
     left: string;
     top: string;
@@ -17,6 +19,7 @@ export default function ContactPage() {
   }>>([]);
 
   useEffect(() => {
+    setIsMounted(true);
     const count = 15;
     const generated = Array.from({ length: count }, (_, i) => {
       const size = 4 + Math.random() * 8;
@@ -51,23 +54,25 @@ export default function ContactPage() {
         </div>
         
         {/* Floating particles with different animation */}
-        <div className="absolute inset-0 opacity-20">
-          {particles.map((p, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full animate-float-rotate"
-              style={{
-                left: p.left,
-                top: p.top,
-                width: `${p.size}px`,
-                height: `${p.size}px`,
-                backgroundColor: p.bg,
-                animationDelay: p.delay,
-                animationDuration: p.duration,
-              }}
-            />
-          ))}
-        </div>
+        {isMounted && (
+          <div className="absolute inset-0 opacity-20">
+            {particles.map((p, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full animate-float-rotate"
+                style={{
+                  left: p.left,
+                  top: p.top,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  backgroundColor: p.bg,
+                  animationDelay: p.delay,
+                  animationDuration: p.duration,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <Navbar />
@@ -100,68 +105,16 @@ export default function ContactPage() {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-[#FF9933] via-blue-500 to-[#138808] rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
               <div className="relative bg-white/90 backdrop-blur-lg rounded-3xl p-10 shadow-xl border border-gray-200">
-                <h2 className="text-3xl font-bold text-gray-800 mb-8">Send Us a Message</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-8">Are you interested in joining NSS?</h2>
                 
                 <form className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all duration-200 outline-none"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all duration-200 outline-none"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all duration-200 outline-none"
-                      placeholder="How can we help?"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={6}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all duration-200 outline-none resize-none"
-                      placeholder="Tell us more about your inquiry..."
-                    />
-                  </div>
-                  
-                  <button
-                    type="submit"
+                  <Link
+                    href="/#join-nss"
                     className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#FF9933] to-[#138808] text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
                   >
-                    <Send className="w-5 h-5" />
-                    <span>Send Message</span>
-                  </button>
+                    <Rocket className="w-5 h-5" />
+                    <span>Join Us</span>
+                  </Link>
                 </form>
               </div>
             </div>
@@ -193,9 +146,21 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Call Us</h3>
-                    <a href="tel:+914066531000" className="text-blue-600 hover:text-blue-800 font-medium text-lg">
-                      +91 40 6653 1000
-                    </a>
+                    <div>
+                      <a href="tel:+919398684340" className="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                        +91 9398684340
+                      </a>
+                    </div>
+                    <div>
+                      <a href="tel:+919392332678" className="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                        +91 9392332678
+                      </a>
+                    </div>
+                    <div>
+                      <a href="tel:+917995036253" className="text-blue-600 hover:text-blue-800 font-medium text-lg">
+                        +91 7995036253
+                      </a>
+                    </div>
                     <p className="text-gray-600 text-sm mt-1">Mon-Fri, 9 AM - 6 PM IST</p>
                   </div>
                 </div>
@@ -255,7 +220,7 @@ export default function ContactPage() {
             <div className="relative bg-white/90 backdrop-blur-lg rounded-3xl p-4 shadow-xl border border-gray-200 overflow-hidden">
               <div className="aspect-video rounded-2xl overflow-hidden">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.4433939732124!2d78.34868231487774!3d17.44514998804752!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb93dc8c5d69df%3A0x19688beb557fa0ee!2sIIIT%20Hyderabad!5e0!3m2!1sen!2sin!4v1635000000000!5m2!1sen!2sin"
+                  src="https://www.google.com/maps?q=17.447249876210552,78.3487203338203&z=17&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}

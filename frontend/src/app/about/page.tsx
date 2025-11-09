@@ -197,9 +197,9 @@ export default function AboutPage() {
               <div className="relative z-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                 {[
                   { number: "500+", label: "Active Volunteers" },
-                  { number: "100+", label: "Events Organized" },
-                  { number: "10K+", label: "Lives Impacted" },
-                  { number: "15+", label: "Years of Service" }
+                  { number: "10+", label: "Events Organized" },
+                  { number: "10K+", label: "Lives Impacted:@IIITH-Campus and @outside IIITH" },
+                  { number: "5+", label: "Years of Service" }
                 ].map((stat, index) => (
                   <div key={index} className="group">
                     <div className="text-5xl font-extrabold text-white mb-2 group-hover:scale-110 transition-transform duration-300">

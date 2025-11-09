@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import membersData from "@/components/team/Data";
+import membersData from "@/data/Data";
 
 type WorkHistory = { role: string; team: string; start: string; end: string | null };
-type Member = typeof membersData[number];
+// Base shape comes from data; augment with admin-only optional fields
+type MemberBase = typeof membersData[number];
+type Member = MemberBase & { year?: string };
 
 export default function AdminMembersPage() {
   const [members, setMembers] = useState<Member[]>(membersData as Member[]);
@@ -11,11 +13,7 @@ export default function AdminMembersPage() {
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<Member | null>(null);
 
-  function toggleAdmin(idx: number) {
-    const copy = [...members];
-    copy[idx] = { ...copy[idx], isAdmin: !copy[idx].isAdmin };
-    setMembers(copy);
-  }
+  // (isAdmin removed) admin toggling is not maintained in this UI
 
   function updateWorkHistory(idx: number, rowIdx: number, key: keyof WorkHistory, value: string) {
     const copy = [...members];
@@ -157,16 +155,7 @@ export default function AdminMembersPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={!!editing.isAdmin} onChange={() => {
-                      const copy = members.map(m => m.id === editing.id ? { ...m, isAdmin: !m.isAdmin } : m);
-                      setMembers(copy);
-                      setEditing(prev => prev ? { ...prev, isAdmin: !prev.isAdmin } : prev);
-                    }} />
-                    <span>isAdmin</span>
-                  </label>
-                </div>
+                {/* isAdmin field removed from admin UI */}
 
                 <div>
                   <h4 className="font-semibold mb-2">Work History</h4>
