@@ -117,6 +117,24 @@ export default function ContactPage() {
                   </Link>
                 </form>
               </div>
+              {/* Large centered logo below the Join button */}
+              <div className="mt-6">
+                <div className="w-full flex justify-center">
+                  <a href="/" aria-label="NSS IIIT Hyderabad" className="flex flex-col items-center gap-4">
+                    <div className="w-48 h-48 md:w-72 md:h-72 lg:w-96 lg:h-96 rounded-full overflow-hidden shadow-lg border-4 border-white/80">
+                      <img
+                        src="/favicon.ico"
+                        alt="NSS IIIT Hyderabad Logo"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-center">
+                      <h4 className="text-2xl md:text-3xl font-bold text-gray-800">NSS IIIT Hyderabad</h4>
+                      <p className="text-sm md:text-base text-gray-600 max-w-xl">National Service Scheme — community service &amp; student outreach</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Contact Information */}
@@ -290,8 +308,12 @@ export default function ContactPage() {
           animation: gradient-x 3s ease infinite;
         }
         
+        /* Use individual animation-* properties so inline styles (animationDuration/animationDelay)
+           applied to particles are not inadvertently overridden by the shorthand. */
         .animate-float-rotate {
-          animation: float-rotate ease-in-out infinite;
+          animation-name: float-rotate;
+          animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
         }
         
         .animate-pulse-slow {

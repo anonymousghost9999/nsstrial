@@ -21,47 +21,47 @@ const FlagshipEvents = () => {
   const events: Event[] = [
     {
       id: 1,
-      title: "Blood Donation Drive - जीवनदान",
-      date: "Every Quarter",
-      description: "Our signature blood donation camps have saved countless lives across Hyderabad. In partnership with leading hospitals, we organize quarterly drives that bring together hundreds of donors. Every drop counts, every life matters - this is our commitment to humanity and the sacred duty of जीवनदान (giving life).",
+      title: "Blood Donation Camp",
+      date: "2025-01-26",
+      description: "On the occasion of Republic Day 2025, the National Service Scheme (NSS) organized a Blood Donation Drive in collaboration with Osmania Medical Hospital. The event aimed to support patients in need by encouraging the IIIT-H community to contribute to this life-saving cause.\n\nWith enthusiastic participation from students, faculty, and staff, the drive successfully collected numerous units of blood, showing the strong social responsibility within the IIIT Hyderabad community. The medical team from Osmania Medical Hospital ensured a safe and seamless donation process, making it an impactful and meaningful event.",
       imagePosition: 'left',
       icon: <Heart className="w-16 h-16 text-red-500" />,
       category: 'Health & Wellness',
-      backgroundImage: '/carousel_images/0.jpeg',
+      backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7jCxBojHUpz0MRIBBROTmxLKNWHUhWMIlDQ&s',
       stats: {
-        participants: '500+',
-        locations: '15+',
-        impact: '2k+ Lives'
+        participants: '300+',
+        locations: '4',
+        impact: '200+ Units'
       }
     },
     {
       id: 2,
-      title: "Digital Literacy - डिजिटल साक्षरता",
-      date: "Monthly Workshops",
-      description: "Bridging the digital divide by teaching computer skills to rural communities and underprivileged youth. Our volunteers conduct hands-on training sessions, empowering people with technology that opens doors to new opportunities and economic independence in Digital India.",
+      title: "Orphanage Visit",
+      date: "2024-11-16",
+      description: "On the occasion of Children’s Day, a meaningful visit was planned to the Tapasvi Foundation Orphanage Home to honor and celebrate the innocence and potential of every child. Volunteers led interactive games, distributed books and educational supplies, and shared encouraging talks, aiming to spread joy and reinforce community care and compassion.",
       imagePosition: 'right',
-      icon: <Monitor className="w-16 h-16 text-blue-500" />,
-      category: 'Education & Empowerment',
-      backgroundImage: '/carousel_images/1.jpeg',
+      icon: <Handshake className="w-16 h-16 text-blue-500" />,
+      category: 'Community Service',
+      backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0yp6lSe3RZyggsz1ZoWvbmjjj3fX2QyV_KQ&s',
       stats: {
-        participants: '300+',
-        locations: '25+',
-        impact: '1.5k+ Trained'
+        participants: '60+',
+        locations: '1',
+        impact: '100+ Children'
       }
     },
     {
       id: 3,
-      title: "Green Campus - हरित परिसर",
-      date: "Year Round",
-      description: "From tree plantation drives to waste management awareness, we're committed to environmental sustainability. Our comprehensive green initiatives include campus beautification, plastic-free campaigns, and educating communities about climate action for a sustainable future.",
+      title: "Batch Tree Plantation",
+      date: "2024-08-03 — 2024-08-04",
+      description: "A symbolic batch tree is planted during UG1 induction, and additional saplings are planted to celebrate the new batch's arrival. This tradition emphasizes unity, growth, and a commitment to sustainability for a greener campus.",
       imagePosition: 'left',
       icon: <Leaf className="w-16 h-16 text-green-500" />,
       category: 'Environment',
-      backgroundImage: '/carousel_images/2.jpg',
+      backgroundImage: 'https://media.licdn.com/dms/image/v2/D5622AQFBLTT7U2lQeQ/feedshare-shrink_800/B56Zie.vLeG0Ag-/0/1755013904389?e=1764806400&v=beta&t=jMbGsOSLmdPRAtP67e1XvivW87R-X5NAhN77EzvGxpM',
       stats: {
-        participants: '400+',
-        locations: '30+',
-        impact: '5k+ Trees'
+        participants: '120+',
+        locations: '1',
+        impact: '250+ Trees'
       }
     }
   ];

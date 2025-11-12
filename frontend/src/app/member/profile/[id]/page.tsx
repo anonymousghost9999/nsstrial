@@ -69,6 +69,9 @@ export default async function MemberProfile({ params }: Props) {
     return s;
   };
 
+  // Local toggle: disable LinkedIn buttons on member profile page while keeping markup
+  const SHOW_LINKEDIN = false;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
@@ -212,15 +215,27 @@ export default async function MemberProfile({ params }: Props) {
             <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-200">
               <h3 className="w-full text-lg font-semibold text-gray-700 mb-2">Connect</h3>
               
-              <a 
-                href={linkedInUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-              >
-                <Linkedin className="w-5 h-5" />
-                <span className="font-medium">LinkedIn</span>
-              </a>
+              {SHOW_LINKEDIN ? (
+                <a 
+                  href={linkedInUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  <Linkedin className="w-5 h-5" />
+                  <span className="font-medium">LinkedIn</span>
+                </a>
+              ) : (
+                <div
+                  role="button"
+                  aria-disabled="true"
+                  title="LinkedIn link temporarily disabled"
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-200 text-white/80 rounded-xl cursor-not-allowed transition-all duration-200 shadow-none"
+                >
+                  <Linkedin className="w-5 h-5 text-gray-500" />
+                  <span className="font-medium text-gray-600">LinkedIn</span>
+                </div>
+              )}
 
               <a 
                 href={`mailto:${member.email}`}

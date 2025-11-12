@@ -13,28 +13,6 @@ export interface EventItem {
 
 const events: EventItem[] = [
   {
-    "event_name": "Test Event for upcoming",
-    "start": "2025-12-01",
-    "end": "2025-12-01",
-    "venue": "Felicity Ground",
-    "description": "This is a test event for upcoming features.",
-    "audience": [
-      "internal"
-    ],
-    "event_profile": ""
-  },
-  {
-    "event_name": "Test Event for ongoing",
-    "start": "2025-11-07",
-    "end": "2025-11-08",
-    "venue": "Felicity Ground",
-    "description": "This is the induction program for UG1 students of 2025.",
-    "audience": [
-      "ug1"
-    ],
-    "event_profile": ""
-  },
-  {
     "event_name": "11th International Yoga Day Celebrations",
     "start": "2025-06-21",
     "end": "2025-06-21",

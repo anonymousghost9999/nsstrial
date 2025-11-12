@@ -43,6 +43,8 @@ export default function MemberCard({ member }: { member: Member }) {
   // Social links
   const linkedInUrl = `https://www.linkedin.com/in/${member.rollNumber}`;
   const emailUrl = `mailto:${member.email}`;
+  // Toggle to disable LinkedIn buttons in the UI while keeping code intact for re-enable
+  const SHOW_LINKEDIN = false;
 
   // Team colors based on Indian flag theme
   const getTeamGradient = () => {
@@ -243,14 +245,25 @@ export default function MemberCard({ member }: { member: Member }) {
             
             {/* Social Links */}
             <div className="flex gap-6">
-              <a 
-                href={linkedInUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-14 h-14 bg-white/90 backdrop-blur-sm rounded-full border-2 border-white hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg"
-              >
-                <Linkedin className="w-7 h-7 text-blue-700" />
-              </a>
+              {SHOW_LINKEDIN ? (
+                <a 
+                  href={linkedInUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-14 h-14 bg-white/90 backdrop-blur-sm rounded-full border-2 border-white hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg"
+                >
+                  <Linkedin className="w-7 h-7 text-blue-700" />
+                </a>
+              ) : (
+                <div
+                  role="button"
+                  aria-disabled="true"
+                  title="LinkedIn link temporarily disabled"
+                  className="flex items-center justify-center w-14 h-14 bg-white/60 backdrop-blur-sm rounded-full border-2 border-white text-gray-400 cursor-not-allowed transition-all duration-300 shadow-none"
+                >
+                  <Linkedin className="w-7 h-7" />
+                </div>
+              )}
               
               <a 
                 href={emailUrl}
