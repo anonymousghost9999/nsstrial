@@ -22,37 +22,37 @@ const FlagshipEvents = () => {
     {
       id: 1,
       title: "Blood Donation Camp",
-      date: "2025-01-26",
+      date: "26/01/2025",
       description: "On the occasion of Republic Day 2025, the National Service Scheme (NSS) organized a Blood Donation Drive in collaboration with Osmania Medical Hospital. The event aimed to support patients in need by encouraging the IIIT-H community to contribute to this life-saving cause.\n\nWith enthusiastic participation from students, faculty, and staff, the drive successfully collected numerous units of blood, showing the strong social responsibility within the IIIT Hyderabad community. The medical team from Osmania Medical Hospital ensured a safe and seamless donation process, making it an impactful and meaningful event.",
       imagePosition: 'left',
       icon: <Heart className="w-16 h-16 text-red-500" />,
       category: 'Health & Wellness',
-      backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7jCxBojHUpz0MRIBBROTmxLKNWHUhWMIlDQ&s',
+      backgroundImage: 'https://life.iiit.ac.in/_next/image?url=http%3A%2F%2Ffiles%2Ffiles%2Fdownload%3Ffilename%3DXimHNrJZNnbQGaswLzFukg_poster_Blood_Donation_Camp_nss.png&w=3840&q=75',
       stats: {
         participants: '300+',
         locations: '4',
-        impact: '200+ Units'
+        impact: '120+ Units'
       }
     },
     {
       id: 2,
       title: "Orphanage Visit",
-      date: "2024-11-16",
+      date: "16/11/2024",
       description: "On the occasion of Children’s Day, a meaningful visit was planned to the Tapasvi Foundation Orphanage Home to honor and celebrate the innocence and potential of every child. Volunteers led interactive games, distributed books and educational supplies, and shared encouraging talks, aiming to spread joy and reinforce community care and compassion.",
       imagePosition: 'right',
       icon: <Handshake className="w-16 h-16 text-blue-500" />,
       category: 'Community Service',
-      backgroundImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0yp6lSe3RZyggsz1ZoWvbmjjj3fX2QyV_KQ&s',
+      backgroundImage: 'https://life.iiit.ac.in/_next/image?url=http%3A%2F%2Ffiles%2Ffiles%2Fdownload%3Ffilename%3D684fkoNxWs9RPZnHDewJq9_IMG-20231116-WA0099.jpg&w=3840&q=75',
       stats: {
         participants: '60+',
         locations: '1',
-        impact: '100+ Children'
+        impact: '40+ Children'
       }
     },
     {
       id: 3,
       title: "Batch Tree Plantation",
-      date: "2024-08-03 — 2024-08-04",
+      date: "03/08/2024 - 04/08/2024",
       description: "A symbolic batch tree is planted during UG1 induction, and additional saplings are planted to celebrate the new batch's arrival. This tradition emphasizes unity, growth, and a commitment to sustainability for a greener campus.",
       imagePosition: 'left',
       icon: <Leaf className="w-16 h-16 text-green-500" />,
@@ -61,7 +61,7 @@ const FlagshipEvents = () => {
       stats: {
         participants: '120+',
         locations: '1',
-        impact: '250+ Trees'
+        impact: '50+ Trees'
       }
     }
   ];
@@ -85,7 +85,7 @@ const FlagshipEvents = () => {
       style={{ backgroundImage: `url(${event.backgroundImage})` }}
       >
         {/* Blur overlay that removes on hover */}
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] group-hover:backdrop-blur-none group-hover:bg-black/10 transition-all duration-500 rounded-2xl" />
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] group-hover:backdrop-blur-none group-hover:bg-black/10 transition-all duration-500 rounded-2xl" />
         
         {/* Indian Flag Border */}
         <div className="indian-flag-border absolute top-0 left-0 w-full h-2 rounded-t-2xl z-20" />
@@ -160,7 +160,7 @@ const FlagshipEvents = () => {
           <div className="indian-flag-border w-32 h-2 mx-auto mb-8 rounded-full" />
           
           <h1 className="text-4xl md:text-6xl text-blue-800 mb-6 font-bold">
-            <Flag className="inline w-12 h-12 mx-2 text-orange-500" /> Flagship Events <Flag className="inline w-12 h-12 mx-2 text-green-600" />
+            Flagship Events
           </h1>
           
           <p className="text-lg md:text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed mb-8">
@@ -185,7 +185,7 @@ const FlagshipEvents = () => {
         </div>
 
         {/* Statistics Overview */}
-        <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-slide-up">
+        {/* <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-slide-up">
           <div className="modern-card text-center group hover:scale-105 transition-all duration-300 p-4 lg:p-6">
             <div className="text-4xl lg:text-5xl mb-4 group-hover:animate-bounce-gentle"><Award className="w-16 h-16 lg:w-20 lg:h-20 mx-auto text-orange-500" /></div>
             <h3 className="heading-secondary text-xl lg:text-2xl text-orange-600 mb-2">Certified</h3>
@@ -203,7 +203,7 @@ const FlagshipEvents = () => {
             <h3 className="heading-secondary text-xl lg:text-2xl text-green-600 mb-2">Impact</h3>
             <p className="text-sm lg:text-base text-gray-600">Measurable change in thousands of lives annually</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -68,7 +68,7 @@ export default function AdminMembersPage() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <a href="/admin" className="text-sm text-gray-600 hover:underline">← Back</a>
-            <h1 className="text-2xl font-bold heading-primary">Admin — Members</h1>
+            <h1 className="text-2xl font-bold heading-primary">Admin - Members</h1>
           </div>
           <div className="flex items-center gap-3">
             <input placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)} className="border px-3 py-2 rounded w-72" />
@@ -132,7 +132,7 @@ export default function AdminMembersPage() {
           <div className="fixed inset-0 bg-black/40 flex items-start justify-center p-6 z-50">
             <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Edit Member — {editing.name}</h2>
+                <h2 className="text-lg font-semibold">Edit Member - {editing.name}</h2>
                 <button onClick={closeEditor} className="text-gray-600">Close</button>
               </div>
               <div className="space-y-3">

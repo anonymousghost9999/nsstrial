@@ -60,7 +60,7 @@ export default function AdminEventManager() {
     <div className="w-full min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50 py-12">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-playfair font-bold text-blue-800">Admin — Events</h1>
+          <h1 className="text-3xl font-playfair font-bold text-blue-800">Admin - Events</h1>
           <div className="flex gap-2">
             <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={() => openEditor({ name: "", startTime: "", endTime: "", location: "", description: "", image: "" })}>Add Event</button>
             <button className="px-4 py-2 bg-gray-100 rounded" onClick={() => { localStorage.removeItem(STORAGE_KEY);

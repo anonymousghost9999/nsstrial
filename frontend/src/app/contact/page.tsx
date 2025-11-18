@@ -130,7 +130,7 @@ export default function ContactPage() {
                     </div>
                     <div className="text-center">
                       <h4 className="text-2xl md:text-3xl font-bold text-gray-800">NSS IIIT Hyderabad</h4>
-                      <p className="text-sm md:text-base text-gray-600 max-w-xl">National Service Scheme — community service &amp; student outreach</p>
+                      <p className="text-sm md:text-base text-gray-600 max-w-xl">National Service Scheme - community service &amp; student outreach</p>
                     </div>
                   </a>
                 </div>

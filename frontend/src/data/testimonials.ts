@@ -1,46 +1,53 @@
-//  instead of this data later we will fetch data from backend and also that part of code will be in folder GraphQL_Q&M
-// for events members and testimonials etc
+// data/testimonials.ts
+
 export type Testimonial = {
   name: string;
   title: string;
+  period?: string;
   quote: string;
 };
 
 export const testimonials: Testimonial[] = [
   {
-    name: "Dr. Meera Subramanian",
-    title: "Regional Director, NSS South Zone",
+    name: "Dileep Kumar Adari",
+    title: "Social Media Head",
+    period: "(2023 - 2025)",
     quote:
-      "NSS inspires the youth to step out of their comfort zones and work selflessly for the betterment of society.",
+      "Being part of NSS helped me contribute to so many meaningful activities—from plantation drives to blood donation events. Seeing the impact our team created together was truly satisfying.",
   },
   {
-    name: "Prof. Rakesh Singh",
-    title: "Program Coordinator, NSS Delhi University",
+    name: "Sai Nikitha Obbineni",
+    title: "Coordinator",
+    period: "(2022 - 2024)",
     quote:
-      "The strength of NSS lies in its volunteers — young hearts who are ready to serve and lead.",
+      "Whether it was visiting orphanages, interacting at old-age homes, or organising distributions, every experience with the team felt purposeful. I'm glad I got to play a part in all of it.",
   },
   {
-    name: "Dr. Kavita Deshmukh",
-    title: "State NSS Officer, Maharashtra",
+    name: "Srihari Bandarupalli",
+    title: "Coordinator",
+    period: "(2022 - 2024)",
     quote:
-      "Each NSS activity is a step toward building a responsible and compassionate generation.",
+      "Working on campus cleaning drives, outreach events, and welfare activities showed me how small efforts add up. The teamwork and the real-world impact kept me motivated throughout.",
   },
   {
-    name: "Prof. Suresh Babu",
-    title: "Program Officer, NSS Kerala",
+    name: "Sri Rama Rathan Reddy Koluguri",
+    title: "Logistics Head",
+    period: "(2023 - 2025)",
     quote:
-      "Through NSS, students learn the true meaning of ‘Not Me But You’ — service above self.",
+      "Handling logistics for events like plantation drives, shram daan, and community visits taught me a lot. Knowing our effort made someone's day better made all the work worth it.",
   },
   {
-    name: "Dr. Anita Reddy",
-    title: "Coordinator, NSS Telangana",
+    name: "Venkata Renu Jeevesh Madala",
+    title: "Coordinator",
+    period: "(2023 - 2025)",
     quote:
-      "NSS bridges the gap between academia and real-world problems by promoting social responsibility among youth.",
+      "From coordinating blood donation drives to helping during outreach programs, I enjoyed every moment with the team. Contributing to causes that mattered gave me a genuine sense of fulfilment.",
   },
   {
-    name: "Prof. Ajay Verma",
-    title: "National Coordinator, NSS New Delhi",
+    name: "Aditya Pavani Penumalla",
+    title: "Design Head",
+    period: "(2022 - 2024)",
     quote:
-      "NSS represents the spirit of youth service. Together, we can build a stronger, more inclusive India.",
+      "Designing for NSS events be it plantation drives, awareness campaigns, or community service visits felt meaningful because I knew it supported real impact on ground.",
   },
 ];

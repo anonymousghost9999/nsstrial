@@ -21,7 +21,7 @@ const AboutUs = () => {
             {/* Impact Stats */}
             <div className="grid grid-cols-3 gap-4 my-8">
               <div className="bg-white p-4 rounded-xl shadow-md text-center group hover:scale-110 transition-all duration-300 border-2 border-green-100 hover:border-green-300">
-                <div className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">1k+</div>
+                <div className="text-3xl md:text-4xl font-bold text-orange-500 mb-2">100+</div>
                 <div className="text-sm text-gray-700 font-semibold">Volunteers</div>
               </div>
               <div className="bg-white p-4 rounded-xl shadow-md text-center group hover:scale-110 transition-all duration-300 border-2 border-blue-100 hover:border-blue-300">
@@ -30,7 +30,7 @@ const AboutUs = () => {
               </div>
               <div className="bg-white p-4 rounded-xl shadow-md text-center group hover:scale-110 transition-all duration-300 border-2 border-orange-100 hover:border-orange-300">
                 <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">10K+</div>
-                <div className="text-sm text-gray-700 font-semibold">Lives Touched</div>
+                <div className="text-sm text-gray-700 font-semibold">Interacted with</div>
               </div>
             </div>
 
@@ -39,7 +39,7 @@ const AboutUs = () => {
             </h2>
             
             {/* Mission Pillars */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
+            <div className="grid grid-cols-2 gap-4 my-8">
               <div className="modern-card text-center group hover:scale-105 transition-all duration-300 hover:shadow-xl">
                 <div className="text-4xl mb-3 group-hover:animate-bounce-gentle"><Heart className="w-10 h-10 mx-auto text-red-500" /></div>
                 <h4 className="font-bold text-primary mb-2">Health & Wellness</h4>
@@ -64,19 +64,7 @@ const AboutUs = () => {
                 <p className="text-sm text-gray-600">Rural development, disaster relief, social awareness</p>
               </div>
             </div>
-              
-            {/* Call to Action */}
-            <div className="bg-gradient-to-r from-indigo-900 via-blue-800 to-slate-800 text-white text-center p-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300">
-              <div className="text-5xl mb-4"><Flag className="w-12 h-12 mx-auto text-amber-300" /></div>
-              <h3 className="text-2xl md:text-3xl mb-4 font-bold">Join the Movement</h3>
-              <p className="text-lg md:text-xl text-slate-200 mb-6">
-                Be part of India's largest student volunteer network. Together, we don't just serve society - we shape its future.
-              </p>
-              <button className="bg-white text-indigo-800 hover:bg-slate-50 text-lg px-8 py-4 font-bold rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <Sparkles className="w-5 h-5" />
-                <span>Become a Volunteer</span>
-              </button>
-            </div>
+            
           </div>
         </div>
 
@@ -110,14 +98,10 @@ const AboutUs = () => {
             </div>
             
             <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="btn-base bg-white text-green-600 hover:bg-gray-100">
-                <Rocket className="w-5 h-5" />
-                <span>Our Impact</span>
-              </button>
-              <button className="btn-base btn-outline border-white text-white hover:bg-white hover:text-green-600">
+              <a href="/about"  className="btn-base btn-outline w-full border-white text-white hover:bg-white hover:text-green-600">
                 <BookOpen className="w-5 h-5" />
-                <span>Our Story</span>
-              </button>
+                <span>About Us</span>
+              </a>
             </div>
           </div>
         </div>

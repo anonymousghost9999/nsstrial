@@ -39,7 +39,7 @@ export default function AdminMemberManager() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50 py-12">
       <div className="container mx-auto px-6 lg:px-8">
-        <h1 className="text-3xl font-playfair font-bold text-blue-800 mb-6">Admin — Members</h1>
+        <h1 className="text-3xl font-playfair font-bold text-blue-800 mb-6">Admin - Members</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {members.map((m) => (
@@ -73,7 +73,7 @@ export default function AdminMemberManager() {
         <div className="fixed inset-0 z-50 flex items-start justify-center p-6">
           <div className="absolute inset-0 bg-black/40" onClick={closeEditor} />
           <div className="relative z-10 w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6 overflow-auto max-h-[90vh]">
-            <h2 className="text-xl font-semibold text-blue-800 mb-4">Edit member — {editing.name}</h2>
+            <h2 className="text-xl font-semibold text-blue-800 mb-4">Edit member - {editing.name}</h2>
             <MemberEditor member={editing} onCancel={closeEditor} onSave={saveMember} />
           </div>
         </div>
