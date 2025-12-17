@@ -3,6 +3,7 @@ import { Heart, Monitor, Leaf, Calendar, BookOpen, Rocket, Phone, Sparkles, Awar
 
 interface Event {
   id: number;
+  url: string;
   title: string;
   date: string;
   description: string;
@@ -12,7 +13,7 @@ interface Event {
   backgroundImage: string;
   stats: {
     participants: string;
-    locations: string;
+    audience: string;
     impact: string;
   };
 }
@@ -21,6 +22,7 @@ const FlagshipEvents = () => {
   const events: Event[] = [
     {
       id: 1,
+      url: '/events/blood-donation-camp',
       title: "Blood Donation Camp",
       date: "26/01/2025",
       description: "On the occasion of Republic Day 2025, the National Service Scheme (NSS) organized a Blood Donation Drive in collaboration with Osmania Medical Hospital. The event aimed to support patients in need by encouraging the IIIT-H community to contribute to this life-saving cause.\n\nWith enthusiastic participation from students, faculty, and staff, the drive successfully collected numerous units of blood, showing the strong social responsibility within the IIIT Hyderabad community. The medical team from Osmania Medical Hospital ensured a safe and seamless donation process, making it an impactful and meaningful event.",
@@ -30,12 +32,13 @@ const FlagshipEvents = () => {
       backgroundImage: 'https://life.iiit.ac.in/_next/image?url=http%3A%2F%2Ffiles%2Ffiles%2Fdownload%3Ffilename%3DXimHNrJZNnbQGaswLzFukg_poster_Blood_Donation_Camp_nss.png&w=3840&q=75',
       stats: {
         participants: '300+',
-        locations: '4',
+        audience: 'Open to All',
         impact: '120+ Units'
       }
     },
     {
       id: 2,
+      url: '/events/orphanage-visit',
       title: "Orphanage Visit",
       date: "16/11/2024",
       description: "On the occasion of Children’s Day, a meaningful visit was planned to the Tapasvi Foundation Orphanage Home to honor and celebrate the innocence and potential of every child. Volunteers led interactive games, distributed books and educational supplies, and shared encouraging talks, aiming to spread joy and reinforce community care and compassion.",
@@ -45,12 +48,13 @@ const FlagshipEvents = () => {
       backgroundImage: 'https://life.iiit.ac.in/_next/image?url=http%3A%2F%2Ffiles%2Ffiles%2Fdownload%3Ffilename%3D684fkoNxWs9RPZnHDewJq9_IMG-20231116-WA0099.jpg&w=3840&q=75',
       stats: {
         participants: '60+',
-        locations: '1',
+        audience: 'Internal',
         impact: '40+ Children'
       }
     },
     {
       id: 3,
+      url: '/events/batch-tree-plantation',
       title: "Batch Tree Plantation",
       date: "03/08/2024 - 04/08/2024",
       description: "A symbolic batch tree is planted during UG1 induction, and additional saplings are planted to celebrate the new batch's arrival. This tradition emphasizes unity, growth, and a commitment to sustainability for a greener campus.",
@@ -60,7 +64,7 @@ const FlagshipEvents = () => {
       backgroundImage: 'https://media.licdn.com/dms/image/v2/D5622AQFBLTT7U2lQeQ/feedshare-shrink_800/B56Zie.vLeG0Ag-/0/1755013904389?e=1764806400&v=beta&t=jMbGsOSLmdPRAtP67e1XvivW87R-X5NAhN77EzvGxpM',
       stats: {
         participants: '120+',
-        locations: '1',
+        audience: 'Freshers',
         impact: '50+ Trees'
       }
     }
@@ -68,7 +72,7 @@ const FlagshipEvents = () => {
 
   const renderEventCard = (event: Event) => (
     <div 
-      key={event.id} 
+      key={event.id} href={event.url}
       className={`
         grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-16 
         modern-card group overflow-hidden
@@ -123,13 +127,9 @@ const FlagshipEvents = () => {
         
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <button className="btn-base bg-indigo-800 text-white hover:bg-indigo-900 transition-all duration-300">
+          <button href={event.url} className="btn-base bg-indigo-800 text-white hover:bg-indigo-900 transition-all duration-300">
             <BookOpen className="w-5 h-5" />
             <span>Learn More</span>
-          </button>
-          <button className="btn-base btn-outline border-amber-500 text-amber-600 hover:bg-amber-500 hover:text-white">
-            <Rocket className="w-5 h-5" />
-            <span>Join Event</span>
           </button>
         </div>
 
@@ -140,8 +140,8 @@ const FlagshipEvents = () => {
             <div className="text-xs md:text-sm font-medium text-orange-700">Participants</div>
           </div>
           <div className="text-center p-3 md:p-4 bg-blue-50 rounded-xl border-2 border-blue-200 hover:border-blue-400 transition-colors">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold text-blue-600 mb-1">{event.stats.locations}</div>
-            <div className="text-xs md:text-sm font-medium text-blue-700">Locations</div>
+            <div className="text-xl md:text-2xl lg:text-3xl font-bold text-blue-600 mb-1">{event.stats.audience}</div>
+            <div className="text-xs md:text-sm font-medium text-blue-700">Audience</div>
           </div>
           <div className="text-center p-3 md:p-4 bg-green-50 rounded-xl border-2 border-green-200 hover:border-green-400 transition-colors">
             <div className="text-xl md:text-2xl lg:text-3xl font-bold text-green-600 mb-1">{event.stats.impact}</div>

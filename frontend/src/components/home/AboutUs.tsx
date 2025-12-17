@@ -35,7 +35,7 @@ const AboutUs = () => {
             </div>
 
             <h2 className="text-3xl md:text-4xl text-center text-blue-800 mb-8 font-bold">
-              Our Noble Mission
+              Our Mission
             </h2>
             
             {/* Mission Pillars */}
@@ -95,13 +95,6 @@ const AboutUs = () => {
               <p className="text-base md:text-lg opacity-90">
                 Where there is service, there is divinity
               </p>
-            </div>
-            
-            <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a href="/about"  className="btn-base btn-outline w-full border-white text-white hover:bg-white hover:text-green-600">
-                <BookOpen className="w-5 h-5" />
-                <span>About Us</span>
-              </a>
             </div>
           </div>
         </div>

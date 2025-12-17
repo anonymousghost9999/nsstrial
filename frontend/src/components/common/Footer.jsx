@@ -96,7 +96,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="hover:scale-105 transition-transform duration-300"
             >
-              <img src="/favicon.ico" alt="NSS Logo" className="w-20 h-20" />
+              <img src="/favicon.ico" alt="NSS Logo" className="w-16 h-16 md:w-20 md:h-20" />
             </a>
             <div className="text-center sm:text-left">
               <h2 className="text-xl lg:text-2xl font-bold text-blue-800 mb-1">
@@ -115,7 +115,7 @@ export default function Footer() {
               <img
                 src="/iiit-logo-color.png"
                 alt="IIIT Logo"
-                className="w-32 h-20"
+                className="w-28 h-16 md:w-32 md:h-20"
               />
             </a>
           </div>
@@ -126,14 +126,14 @@ export default function Footer() {
         </div>
 
         {/* Content Sections - Responsive layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 mb-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 lg:gap-12 mb-6 max-w-6xl mx-auto">
           {/* Quick Navigation */}
-          <div className="text-center sm:text-left lg:text-left max-w-sm mx-auto sm:mx-0">
-            <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center justify-center justify-self-center sm:justify-start gap-2">
+          <div className="text-center md:text-left lg:text-left max-w-sm mx-auto">
+            <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center justify-center justify-self-center md:justify-start gap-2">
               <Menu size={18} />
               Quick Navigation
             </h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-2 justify-center">
+            <ul className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 justify-center">
               {quickLinks.map((link, index) => (
                 <li key={index} className="flex justify-center">
                   <a
@@ -142,7 +142,7 @@ export default function Footer() {
                     rel={
                       link.href.startsWith("http") ? "noopener noreferrer" : ""
                     }
-                    className="text-gray-700 hover:text-orange-500 text-sm font-medium transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 py-1 px-2 rounded hover:bg-orange-50 group"
+                    className="text-gray-700 hover:text-orange-500 text-sm font-medium transition-all duration-300 flex items-center justify-center md:justify-start gap-2 py-1 px-2 rounded hover:bg-orange-50 group"
                   >
                     <span className="w-1.5 h-1.5 bg-orange-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     {link.name}
@@ -198,8 +198,8 @@ export default function Footer() {
           </div>
 
           {/* Contact Information */}
-          <div className="text-center max-w-sm mx-auto sm:mx-0 justify-center">
-            <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center justify-center gap-2">
+          <div className="text-center md:text-left max-w-sm mx-auto md:mx-0 justify-center">
+            <h3 className="text-lg font-bold text-blue-800 mb-4 flex items-center justify-center md:justify-start gap-2">
               <MapPin size={18} />
               Get in Touch
             </h3>

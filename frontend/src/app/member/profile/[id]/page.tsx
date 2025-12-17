@@ -319,51 +319,6 @@ export default async function MemberProfile({ params }: Props) {
             )}
           </div>
         )}
-
-        {/* Additional Information - Achievements & Interests */}
-        {((member.achievements && member.achievements.length > 0) || (member.interests && member.interests.length > 0)) && (
-          <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Additional Information</h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Achievements */}
-              {member.achievements && member.achievements.length > 0 && (
-                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-5 border-2 border-yellow-200">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    🏆 Achievements
-                  </h3>
-                  <ul className="space-y-3">
-                    {member.achievements.map((achievement: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <span className="text-yellow-600 mt-1">★</span>
-                        <span className="text-gray-700">{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Interests */}
-              {member.interests && member.interests.length > 0 && (
-                <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-5 border-2 border-pink-200">
-                  <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    💡 Interests
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {member.interests.map((interest: string, index: number) => (
-                      <span 
-                        key={index}
-                        className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-full text-sm font-medium shadow-md"
-                      >
-                        {interest}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

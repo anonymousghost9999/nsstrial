@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Calendar, Info, Users, Phone, Rocket, Menu, X } from "lucide-react";
+import { Home, Calendar, Info, Users, Phone, Menu, X } from "lucide-react";
 
 const navigationItems = [
     { label: "Home", href: "/", icon: Home },
@@ -16,15 +16,13 @@ export default function Navbar() {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [userAuthenticated, setUserAuthenticated] = useState(false);
+    // Authentication UI removed
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
         window.addEventListener("scroll", handleScroll);
         
-        // Check authentication status
-        const uid = document.cookie.match(/(?:^|; )uid=([^;]*)/);
-        setUserAuthenticated(!!uid);
+        // Authentication UI removed
         
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
@@ -38,19 +36,10 @@ export default function Navbar() {
         setIsMobileMenuOpen(false);
     };
 
-    const handleLogin = () => {
-        window.location.replace("/login");
-    };
-
-    const handleProfile = () => {
-        const uid = document.cookie.match(/(?:^|; )uid=([^;]*)/);
-        if (uid) {
-            window.location.replace(`/me/profile/?uid=${decodeURIComponent(uid[1])}`);
-        }
-    };
+    // Login/Profile actions removed
 
     return (
-        <>
+        <div>
             {/* Mobile Menu Overlay */}
             {isMobileMenuOpen && (
                 <div 
@@ -115,36 +104,8 @@ export default function Navbar() {
                             })}
                         </div>
 
-                        {/* Auth & Mobile Menu */}
-                        <div className="flex items-center space-x-3">
-                            {/* Auth Button */}
-                            {!userAuthenticated ? (
-                                <button
-                                    // onClick={handleLogin}
-                                    style={{
-                                        background: '#332a67',
-                                        opacity: 0.3,
-                                    }}
-                                    className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-900 transition-all duration-200 cursor-not-allowed"
-                                >
-                                    <Rocket className="w-4 h-4" />
-                                    <span>Login</span>
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={handleProfile}
-                                    className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-blue-800 p-0.5 hover:scale-105 transition-all duration-200 cursor-pointer"
-                                    title="Profile"
-                                >
-                                    <img 
-                                        src="/favicon.ico" 
-                                        alt="Profile" 
-                                        className="w-full h-full rounded-full object-cover bg-white"
-                                    />
-                                </button>
-                            )}
-
-                            {/* Mobile Menu Button */}
+                        {/* Mobile Menu Button */}
+                        <div className="flex items-center">
                             <button
                                 className="lg:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-200"
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -157,8 +118,8 @@ export default function Navbar() {
                                 )}
                             </button>
                         </div>
+                        </div>
                     </div>
-                </div>
             </nav>
 
             {/* Mobile Menu */}
@@ -226,28 +187,9 @@ export default function Navbar() {
                         })}
                     </div>
 
-                    {/* Mobile Auth Section */}
-                    <div className="mt-8 pt-6 border-t border-gray-200">
-                        {!userAuthenticated ? (
-                            <button
-                                // onClick={handleLogin}
-                                className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-800 text-white rounded-lg font-medium hover:bg-blue-900 transition-all duration-200 opacity-20 cursor-not-allowed"
-                            >
-                                <Rocket className="w-5 h-5" />
-                                <span>Login to NSS Portal</span>
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleProfile}
-                                className="w-full flex items-center justify-center space-x-2 p-3 rounded-lg bg-gradient-to-r from-green-500 to-blue-800 text-white font-medium transition-all duration-200"
-                            >
-                                <img src="/favicon.ico" alt="Profile" className="w-6 h-6 rounded-full" />
-                                <span>View Profile</span>
-                            </button>
-                        )}
-                    </div>
+                    {/* Mobile Auth Section removed */}
                 </div>
             </div>
-        </>
+        </div>
     );
 }

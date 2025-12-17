@@ -86,24 +86,19 @@ export default function MemberCard({ member }: { member: Member }) {
       onMouseLeave={() => setHover(false)}
     >
       <div
-        className={`relative w-full h-full transition-all duration-700 ease-out rounded-3xl cursor-pointer ${
+        className={`relative w-full h-full transition-transform duration-300 ease-out rounded-3xl cursor-pointer ${
           hover 
-            ? 'shadow-2xl shadow-blue-200/50' 
+            ? 'shadow-2xl shadow-blue-200/50 scale-[1.02]' 
             : 'shadow-lg shadow-gray-200/50'
         }`}
-        style={{
-          transformStyle: "preserve-3d",
-          transform: hover ? "rotateY(180deg)" : "rotateY(0deg)",
-        }}
       >
         {/* Front Side */}
         <div
           className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white to-gray-50 rounded-3xl flex flex-col items-center p-6 text-center justify-between border-2 border-gray-100 hover:border-blue-200 transition-all duration-300"
-          style={{ backfaceVisibility: "hidden" }}
         >
           {/* Indian Flag Border */}
           <div 
-            className="absolute top-0 left-0 w-full h-1 rounded-t-lg"
+            className="absolute top-0 left-6 right-6 h-1 rounded-full"
             style={{
               background: "linear-gradient(to right, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%)"
             }}
@@ -147,9 +142,24 @@ export default function MemberCard({ member }: { member: Member }) {
               {member.team}
             </div>
             
-            <h3 className="text-xl font-bold text-gray-800 mb-2 leading-tight">
-              {member.name}
-            </h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-2 leading-tight">{member.name}</h3>
+
+            {/* Roll Number and Email (moved from back) */}
+            <div className="flex gap-2 items-center justify-center mb-3 mt-1">
+              <div className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-white shadow">
+                <span className="text-slate-700 text-sm font-semibold">
+                  {member.rollNumber}
+                </span>
+              </div>
+              <a 
+                href={emailUrl}
+                className="flex items-center justify-center w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full border border-white hover:bg-white hover:scale-110 transition-all duration-300 shadow"
+                title={member.email}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Mail className="w-5 h-5 text-blue-700" />
+              </a>
+            </div>
           </div>
           
           {/* Duration Info - Positioned on card outline */}
@@ -157,8 +167,7 @@ export default function MemberCard({ member }: { member: Member }) {
             <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap ${getStatusBadge()} shadow-xl`}>
               <span className="mr-2">
               {(!member.to || (typeof member.to === 'string' && member.to.toLowerCase() === 'present')) ? 
-                <CheckCircle className="w-4 h-4 text-green-600 inline" /> : 
-                <XCircle className="w-4 h-4 text-red-600 inline" />
+                <CheckCircle className="w-4 h-4 text-green-600 inline" /> : <></>
                 }
               </span>
               <span className="truncate">
@@ -201,55 +210,7 @@ export default function MemberCard({ member }: { member: Member }) {
             </div>
         </div>
 
-        {/* Back Side */}
-        <div
-          className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-800 via-blue-700 to-slate-800 rounded-3xl flex flex-col items-center justify-center p-6 text-center text-white border-2 border-blue-200"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-        >
-          {/* Dark overlay for better text visibility */}
-          <div className="absolute inset-0 bg-black/40 rounded-3xl" />
-          
-          {/* Blurred Background Image */}
-          <div
-            className="absolute top-0 left-0 w-full h-full rounded-3xl overflow-hidden opacity-10"
-          >
-            <img
-              src={getImageSrc()}
-              alt=""
-              className="w-full h-full object-cover blur-lg brightness-[0.2]"
-            />
-          </div>
-          
-          {/* Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            <div className="mb-4">
-              <h3 className="text-2xl font-bold mb-4 text-white drop-shadow-lg">
-                {member.name}
-              </h3>
-              
-              {/* Roll Number and Email Icon Side by Side */}
-              <div className="flex gap-2 items-center justify-center mb-4">
-                <div className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-white shadow-lg">
-                  <span className="text-slate-700 text-sm font-semibold">
-                    {member.rollNumber}
-                  </span>
-                </div>
-                
-                <a 
-                  href={emailUrl}
-                  className="flex items-center justify-center w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full border border-white hover:bg-white hover:scale-110 transition-all duration-300 shadow-lg"
-                  title={member.email}
-                >
-                  <Mail className="w-5 h-5 text-blue-700" />
-                </a>
-              </div>
-              
-              <p className="text-white/90 text-sm font-medium">
-                Connect with me
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Back Side removed (no rotation) */}
       </div>
     </div>
   );

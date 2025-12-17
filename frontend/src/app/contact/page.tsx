@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Navbar from '@/components/common/Navbar';
-import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Twitter, Send, MessageCircle, Rocket } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, X, Heart, Rocket } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ContactPage() {
@@ -21,23 +21,10 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto">
             {/* Hero Section */}
             <div className="text-center mb-20">
-              <div className="inline-block mb-6 animate-float-rotate">
-              <div className="p-6 bg-gradient-to-r from-blue-700 to-purple-700 rounded-full shadow-lg hover:shadow-2xl transition-shadow duration-300">
-              <MessageCircle className="w-16 h-16 text-white animate-pulse-slow" />
-              </div>
-              </div>
-              
-              <h1 className="text-6xl sm:text-7xl font-extrabold mb-6">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-purple-700 animate-gradient-x">
-                Get In Touch
-              </span>
+              <h1 className="text-6xl sm:text-7xl font-extrabold mb-6 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 bg-clip-text text-transparent animate-gradient-x">
+              Contact Us
               </h1>
-              
-              <div className="w-24 h-1 mx-auto mb-8 bg-gradient-to-r from-[#FF9933] via-white to-[#138808] rounded-full"></div>
-              
-              <p className="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-medium">
-              Have questions or want to collaborate? We'd love to hear from you!
-              </p>
+              <div className="w-24 h-1 mx-auto mb-8 bg-gradient-to-r from-blue-900 via-purple-700 to-indigo-900 rounded-full"></div>
             </div>
 
           <div className="grid lg:grid-cols-2 gap-12 mb-20">
@@ -149,10 +136,10 @@ export default function ContactPage() {
                   <h3 className="text-2xl font-bold text-white mb-6">Follow Us On Social Media</h3>
                   <div className="flex flex-wrap gap-4">
                     {[
-                      { icon: Instagram, label: "Instagram", href: "https://instagram.com/nss.iiith", color: "from-blue-600 to-blue-800" },
-                      { icon: Facebook, label: "Facebook", href: "https://facebook.com/nss.iiith", color: "from-blue-700 to-blue-900" },
-                      { icon: Twitter, label: "Twitter", href: "https://twitter.com/nss_iiith", color: "from-blue-600 to-blue-800" },
-                      { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/company/nss-iiith", color: "from-blue-700 to-blue-900" },
+                      { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/nss_iiith/", color: "from-blue-600 to-blue-800" },
+                      { icon: X, label: "X", href: "https://x.com/NSSIIITH", color: "from-blue-700 to-blue-900" },
+                      { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/nssiiith/", color: "from-blue-700 to-blue-900" },
+                      { icon: Heart, label: "Whatsapp", href: "https://chat.whatsapp.com/DmDwI59gXglHHZ9CuYPKkM", color: "from-green-600 to-green-800" },
                     ].map((social, index) => (
                       <a
                         key={index}

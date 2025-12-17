@@ -98,10 +98,15 @@ const Carousel: React.FC<CarouselProps> = ({ images, interval = 5000, children }
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <a href="https://chat.whatsapp.com/DmDwI59gXglHHZ9CuYPKkM" target="_blank" rel="noopener noreferrer" className="group  text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3 cursor-pointer" style={{ background: '#b95943ff' }}>
+            <button 
+              type="button"
+              onClick={scrollToJoinNSS}
+              className="group text-white font-bold text-lg px-8 py-4 rounded-full hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center gap-3 cursor-pointer" 
+              style={{ background: '#b95943ff' }}
+            >
               <span>Join Our Mission</span>
               <div className="w-2 h-2 bg-white rounded-full group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
             <button 
             className="border-2 border-white text-white hover:bg-white hover:text-blue-800 font-semibold text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 cursor-pointer" onClick={() => redirect('/events')} >
               Explore Events

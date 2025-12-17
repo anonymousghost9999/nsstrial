@@ -241,8 +241,7 @@ export default function MembersSection({ members }: { members: Member[] }) {
                       onClick={() => setShowAll(true)}
                       className="btn-base bg-gradient-to-r from-green-500 to-blue-500 text-white hover:from-green-600 hover:to-blue-600"
                     >
-                      <span>👀</span>
-                      <span>View {group.length - MAX_CARDS} More {team} Members</span>
+                      <span>View More</span>
                     </button>
                   </div>
                 )}
@@ -269,7 +268,7 @@ export default function MembersSection({ members }: { members: Member[] }) {
                 <div className="flex items-center justify-between mb-8">
                   <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
                     <GraduationCap className="w-8 h-8 text-blue-600" />
-                    Class of {year}
+                    Team of {year}
                     <span className="ml-2 px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
                       {group.length} {group.length === 1 ? 'past member' : 'past members'}
                     </span>
@@ -286,8 +285,7 @@ export default function MembersSection({ members }: { members: Member[] }) {
                       onClick={() => setShowAll(true)}
                       className="btn-base bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600"
                     >
-                      <span>👀</span>
-                      <span>View {group.length - MAX_CARDS} More Past Members from {year}</span>
+                      <span>View More</span>
                     </button>
                   </div>
                 )}

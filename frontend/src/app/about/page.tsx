@@ -20,6 +20,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
             {/* Hero Section */}
             <div className="text-center mb-20">
+            
             <h1 className="text-6xl sm:text-7xl font-extrabold mb-6 bg-gradient-to-r from-blue-900 via-purple-800 to-indigo-900 bg-clip-text text-transparent animate-gradient-x">
               About NSS IIIT-H
             </h1>

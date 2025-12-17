@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserPlus, FileText } from 'lucide-react';
+import { UserPlus, FileText, MessageCircle } from 'lucide-react';
 
 const VolunteerReg = () => {
   return (
@@ -45,6 +45,24 @@ const VolunteerReg = () => {
               registration form
             </a>
             {' '}with all the necessary details.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-8 lg:p-10 flex-1 min-w-0 max-w-md mx-auto lg:mx-0 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border-2 border-red-200">
+          <div className="flex items-center justify-center mb-6">
+            <MessageCircle className="w-16 h-16 text-red-600" />
+          </div>
+          <h2 className="text-xl md:text-2xl font-bold mb-5 text-red-600">STEP 3</h2>
+          <p className="text-base md:text-lg leading-relaxed text-gray-700">
+            Join our{' '}
+            <a 
+              href="https://chat.whatsapp.com/DmDwI59gXglHHZ9CuYPKkM" 
+              target='_blank' 
+              className="text-red-600 font-semibold hover:text-red-700 hover:underline transition-colors duration-300"
+            >
+              WhatsApp group
+            </a>
+            {' '}to stay updated and connected.
           </p>
         </div>
       </div>
