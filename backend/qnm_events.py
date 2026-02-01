@@ -9,21 +9,15 @@ ist = pytz.timezone("Asia/Kolkata")
 time=datetime.datetime.now(ist)
 
 @strawberry.mutation
-def addEvent(event: EventInput, head: MemberInput | None = None) -> bool:
-    event_data = event.model_dump()    
-    if head:
-        head_data = head.model_dump()
-        event_data["eventHead"] = head_data
+def addEvent(event: EventInput) -> bool:
+    event_data = event.model_dump()
     
     db["events"].insert_one(event_data)
     return True
 
 @strawberry.mutation
-def changeEvent(event: EventInput, head:MemberInput | None = None) -> bool:
+def changeEvent(event: EventInput) -> bool:
     event_data = event.model_dump()
-    if head:
-        head_data = head.model_dump()
-        event_data["eventHead"] = head_data
     
     result = db["events"].update_one(
         {"name": event.name},
@@ -32,7 +26,7 @@ def changeEvent(event: EventInput, head:MemberInput | None = None) -> bool:
     return result.modified_count > 0
 
 @strawberry.field
-def viewEvents(name: str | None = None, startTime:str | None = None, endTime:str | None = None)  -> list[EventType]:
+def viewEvents(name: str | None = None, startTime:str | None = None, endTime:str | None = None)  -> list[Event]:
     if name:
         events = db["events"].find({"name": name})
     elif startTime and endTime:
@@ -42,7 +36,7 @@ def viewEvents(name: str | None = None, startTime:str | None = None, endTime:str
     events = list(events)
     if not events:
         return []
-    return [EventType(**event) for event in events]
+    return [Event(**event) for event in events]
 
 queries = [viewEvents]
 mutations = [addEvent, changeEvent]

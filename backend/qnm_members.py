@@ -24,12 +24,10 @@ def changeMember(member: MemberInput) -> bool:
     return True
 
 @strawberry.field
-def viewMembers(name: str = None, team: list[MemberTypeEnum] = None) -> list[Member]:
+def viewMembers(name: str = None) -> list[Member]:
     members=[]
     if name:
         members = list(db["members"].find({"name": name}))
-    elif team:
-        members = list(db["members"].find({"team": {"$in": team}}))
     else:
         members = list(db["members"].find({}))
     return members

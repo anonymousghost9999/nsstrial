@@ -5,6 +5,7 @@ from strawberry.fastapi import GraphQLRouter
 from qnm_members import queries, mutations
 from database import get_database, close_connection
 from os import getenv
+import os
 import time
 import psutil
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
@@ -13,6 +14,7 @@ from urllib.parse import quote_plus
 from fastapi import Request
 from fastapi.responses import RedirectResponse
 from cas import CASClient
+from fastapi.staticfiles import StaticFiles
 
 from strawberry.tools import create_type
 Query = create_type("Query", queries)
@@ -82,6 +84,13 @@ app.add_middleware(
 schema = strawberry.Schema(query=Query, mutation=Mutation)
 gqlr = GraphQLRouter(schema, graphql_ide='graphiql')
 app.include_router(gqlr, prefix="/graphql")
+
+# Serve uploaded files statically
+app.mount(
+    "/uploads",
+    StaticFiles(directory=os.getenv("UPLOAD_DIR", "uploads")),
+    name="uploads"
+)
 
 @app.on_event("startup")
 async def startup_event():

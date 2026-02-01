@@ -29,11 +29,14 @@ services:
       - MONGODB_URL=mongodb://admin:password123@mongodb:27017/nss_db?authSource=admin
       - API_ENV=development
       - API_PORT=8000
+      - UPLOAD_DIR=uploads
+      - FILES_BASE_URL=http://localhost:8000/uploads
     depends_on:
       - mongodb
     volumes:
       - ./backend:/app
       - /app/venv
+      - files_data:/app/uploads
     networks:
       - app-network
   
@@ -89,6 +92,7 @@ services:
 
 volumes:
   mongodb_data:
+  files_data:
   redis_data:
 
 networks:
