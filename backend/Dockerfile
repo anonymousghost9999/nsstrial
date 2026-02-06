@@ -28,6 +28,9 @@ RUN venv/bin/pip install -r requirements.txt
 # Copy application code
 COPY . .
 
+# Create uploads directory (required for schema export)
+RUN mkdir -p uploads
+
 # Generate GraphQL schema
 RUN venv/bin/strawberry export-schema main > schema.graphql
 
