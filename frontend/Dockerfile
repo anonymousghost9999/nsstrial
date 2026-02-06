@@ -15,9 +15,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
+# Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm run build
@@ -36,11 +34,11 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json* ./
 
-# Copy build output
+# Copy build output (Standard Mode requires the whole folder)
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 
-# Install only production dependencies
+# Install production dependencies (Required for Standard Mode)
 RUN npm ci --only=production
 
 RUN chown -R nextjs:nodejs /app
@@ -56,4 +54,4 @@ ENV HOSTNAME "0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000 || exit 1
 
-CMD ["node", ".next/standalone/server.js"]
+CMD ["npm", "start"]
